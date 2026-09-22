@@ -1,0 +1,34 @@
+Plan de Producto: FacturaMétrica
+1. Visión General del Producto y Propuesta de Valor
+FacturaMétrica es una solución B2B2C diseñada para asesorías y despachos contables. Se compone de una aplicación móvil ultraligera para el autónomo y un panel de control web avanzado para el equipo contable de la gestoría.
+Su objetivo no es solo digitalizar tickets, sino actuar como un filtro fiscal preventivo que evite que los gastos deducibles mal justificados lleguen al programa contable del despacho, reduciendo las fricciones por WhatsApp/email entre gestor y cliente.
+2. Flujo de Usuario (User Journey)
+A. Lado del Autónomo (App Móvil / PWA)
+Captura Rápida: El usuario fotografía un ticket de una comida, combustible, material o alojamiento, o reenvía un PDF de factura recibida por email.
+Análisis Instantáneo con IA/OCR: En segundos, el sistema extrae: NIF emisor, importe, IVA desglosado, fecha, hora y categoría potencial.
+El "Asesor Fiscal Virtual" (Validación Inteligencia Contextual):
+Ejemplo 1 (Gasto Normal): Sube una factura de suministros de oficina un martes a las 10:00 h → Se marca automáticamente como "Verde (Deducible)".
+Ejemplo 2 (Gasto de Riesgo / Alerta AEAT): Sube un ticket de una cena un sábado a las 23:30 h o una factura de Amazon sin los datos fiscales correctos de la empresa → La app le lanza una notificación interactiva:
+"Hola, detectamos este gasto en fin de semana. Para que Hacienda te lo acepte, ¿con qué cliente fue? Introduce su nombre/NIF o descríbenos brevemente el motivo profesional".
+
+Cierre de Ciclo: Una vez respondida la pequeña duda o corregido el dato, el gasto queda "Bloqueado y Validado" para el trimestre.
+B. Lado del Gestor / Contable (Panel Web B2B)
+Bandeja de Entrada por Clientes: El contable ve un panel unificado con la cartera de autónomos. Los gastos ya no llegan desordenados; llegan agrupados en tres estados:
+Verde: Listos para exportar con su cuenta contable asignada del Plan General Contable (PGC).
+Amarillo / Con observaciones: Gastos que la app ha marcado como dudosos pero que el autónomo ya ha justificado textualmente (ej. "Comida con proveedor X para cerrar contrato de suministros"). El contable solo tiene que dar un clic para aceptar el criterio.
+Rojo: Gastos inaceptables por ley (multas de tráfico, consumos personales evidentes) donde la app ya le ha advertido al autónomo que no se deducirá fiscalmente.
+Exportación a Software de Contabilidad: Generación de un archivo formateado (o conexión mediante API si el ERP lo permite) listo para volcar directamente en los programas de la asesoría (A3 Conecta, Wolters Kluwer, Sage, etc.).
+3. Arquitectura Técnica Recomendada
+Frontend Autónomo (App Móvil / PWA): React con TypeScript y Tailwind CSS, optimizada para rendimiento móvil rápido y funcionamiento offline temporal.
+Frontend Asesoría (Panel Web Desktop): React o Next.js con interfaces densas de datos (tablas avanzadas, filtros por etiquetas de riesgo, gráficos de evolución de gastos deducibles por cliente).
+Backend & API Core: Python con FastAPI (ideal por su rendimiento y ecosistema nativo para procesamiento de datos e IA).
+Motor OCR & Procesamiento de Datos:
+Modelos de visión por computadora y extracción de entidades (NER) afinados para documentos fiscales españoles (tickets térmicos arrugados, facturas simplificadas, facturas electrónicas Facturae/PDF).
+Motor de reglas de negocio basado en la Ley del Impuesto sobre la Renta de las Personas Físicas (LIRPF) y criterios recurrentes de la AEAT sobre gastos de difícil justificación, manutención y vehículos.
+Base de Datos: PostgreSQL (con extensiones de seguridad para cifrado de datos fiscales y separación multi-tenant estricta por asesoría).
+4. Estrategia de Go-to-Market (Salida al Mercado)
+Canal de Adquisición Directo: Venta directa a gestores y medianas asesorías en Extremadura y zonas colindantes, vendiéndoles la herramienta como un ahorro drástico de tiempo en el cierre trimestral.
+Modelo de Precios (SaaS B2B):
+Tarifa plana mensual para la asesoría basada en el volumen de autónomos activos gestionados en la plataforma.
+La app para el autónomo es gratuita (bajo la marca white-label de su propia asesoría, reforzando la imagen de modernidad del despacho).
+Fase Piloto (MVP): Seleccionar 2 o 3 asesorías colaboradoras de confianza para testear el motor OCR con tickets reales de autónomos locales y afinar las preguntas del "Asesor Fiscal Virtual" para que no resulten molestas ni excesivas para el usuario final.
