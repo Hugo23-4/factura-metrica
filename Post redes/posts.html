@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Posts FacturaMétrica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --azul: #1B5CF2;
+    --azul-claro: #4F82F7;
+    --carbon: #26272C;
+    --carbon-claro: #3A3B42;
+    --lima: #CDF27E;
+    --blanco: #FFFFFF;
+    --gris: #EEF0F4;
+    --verde: #22C55E;
+    --amarillo: #F5A524;
+    --rojo: #EF4444;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #D9DCE3; font-family: 'Poppins', sans-serif; display: flex; flex-wrap: wrap; gap: 40px; padding: 40px; }
+  .post { width: 1080px; height: 1350px; position: relative; overflow: hidden; padding: 90px; color: var(--blanco); }
+  .azul { background: var(--azul); }
+  .carbon { background: var(--carbon); }
+  .blanco { background: var(--blanco); color: var(--carbon); }
+  .gris { background: var(--gris); color: var(--carbon); }
+
+  .marca { position: absolute; left: 90px; bottom: 70px; font-size: 26px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9; }
+  .marca span { font-weight: 400; opacity: 0.7; }
+  .esquina { position: absolute; right: 90px; bottom: 70px; font-size: 22px; font-weight: 500; opacity: 0.7; text-align: right; }
+
+  .pildora { display: inline-block; padding: 12px 30px; border-radius: 999px; font-weight: 600; font-size: 24px; letter-spacing: 1px; text-transform: uppercase; }
+  .pildora.lima { background: var(--lima); color: var(--carbon); }
+  .pildora.contorno { border: 4px solid currentColor; text-transform: none; letter-spacing: 0; font-size: 56px; padding: 14px 44px; }
+  .pildora.solida { background: var(--blanco); color: var(--azul); text-transform: none; letter-spacing: 0; font-size: 56px; padding: 18px 48px; }
+
+  h1 { font-weight: 600; line-height: 1.05; letter-spacing: -2px; }
+  em { font-style: italic; font-weight: 600; position: relative; display: inline-block; }
+  .subrayado::after { content: ''; position: absolute; left: -2%; right: -4%; bottom: -6px; height: 26px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 30' preserveAspectRatio='none'%3E%3Cpath d='M4 20 C 90 6, 220 4, 396 14' stroke='%23CDF27E' stroke-width='9' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / 100% 100%; }
+  .subrayado.blanco-trazo::after { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 30' preserveAspectRatio='none'%3E%3Cpath d='M4 20 C 90 6, 220 4, 396 14' stroke='%231B5CF2' stroke-width='9' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); }
+
+  /* 1 · Portada */
+  .p1 .pildora { margin-bottom: 60px; }
+  .p1 h1 { font-size: 132px; }
+  .p1 .bajada { font-size: 34px; margin-top: 50px; max-width: 520px; opacity: 0.9; line-height: 1.4; }
+  .p1 .tickets { position: absolute; right: -40px; bottom: 120px; display: flex; gap: 26px; transform: rotate(-8deg); }
+  .ticket { width: 230px; height: 330px; background: var(--blanco); border-radius: 18px; padding: 28px 24px; color: var(--carbon); box-shadow: 0 30px 60px rgba(0,0,0,0.18); }
+  .ticket .linea { height: 12px; border-radius: 6px; background: #E3E5EA; margin-bottom: 16px; }
+  .ticket .total { margin-top: 30px; font-weight: 700; font-size: 34px; }
+  .ticket .estado { margin-top: 14px; display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 600; padding: 6px 16px; border-radius: 999px; }
+  .ticket .estado i { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+
+  /* 2 · Dato */
+  .p2 .pildora { position: absolute; top: 90px; right: 90px; }
+  .p2 .pequeno { font-size: 34px; font-weight: 500; line-height: 1.4; max-width: 520px; margin-top: 40px; opacity: 0.9; }
+  .p2 h1 { font-size: 280px; position: absolute; right: 70px; bottom: 150px; letter-spacing: -10px; }
+  .p2 h1 small { font-size: 140px; letter-spacing: -4px; }
+  .p2 .titulo { font-size: 76px; line-height: 1.1; font-weight: 600; letter-spacing: -1.5px; }
+
+  /* 3 · Píldoras */
+  .p3 .lista { display: flex; flex-direction: column; gap: 46px; margin-top: 60px; }
+  .p3 .lista > div:nth-child(2) { margin-left: 70px; }
+  .p3 .lista > div:nth-child(3) { margin-left: 260px; }
+  .p3 .lista > div:nth-child(4) { margin-left: 120px; }
+  .p3 .lista > div:nth-child(5) { margin-left: 30px; }
+  .p3 .encabezado { font-size: 30px; font-weight: 500; opacity: 0.85; }
+
+  /* 4 · Chat */
+  .p4 .chat { display: flex; flex-direction: column; gap: 34px; margin-top: 70px; }
+  .burbuja { max-width: 760px; padding: 34px 42px; border-radius: 36px; font-size: 36px; line-height: 1.4; font-weight: 500; position: relative; }
+  .burbuja.app { background: var(--azul); align-self: flex-start; border-bottom-left-radius: 8px; }
+  .burbuja.yo { background: var(--lima); color: var(--carbon); align-self: flex-end; border-bottom-right-radius: 8px; }
+  .burbuja .quien { display: block; font-size: 22px; font-weight: 600; opacity: 0.75; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .p4 h1 { font-size: 80px; letter-spacing: -1.5px; }
+
+  /* 5 · Semáforo */
+  .p5 h1 { font-size: 92px; }
+  .p5 .filas { margin-top: 70px; display: flex; flex-direction: column; gap: 28px; }
+  .p5 .fila { display: flex; gap: 34px; align-items: center; background: var(--blanco); border-radius: 36px; padding: 36px 40px; }
+  .p5 .luz { width: 84px; height: 84px; border-radius: 50%; flex-shrink: 0; }
+  .p5 .fila b { display: block; font-size: 40px; font-weight: 600; }
+  .p5 .fila span { font-size: 28px; color: #5C5F69; line-height: 1.35; display: block; margin-top: 4px; }
+
+  /* 6 · Calendario */
+  .p6 .cabecera { display: flex; justify-content: space-between; align-items: flex-start; }
+  .p6 h1 { font-size: 92px; }
+  .p6 .contador { text-align: right; font-size: 26px; font-weight: 500; }
+  .p6 .contador b { display: block; font-size: 92px; line-height: 1; font-weight: 600; }
+  .p6 .pildora { margin-top: 30px; transform: rotate(-6deg); }
+  .p6 .cal { margin-top: 90px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 22px 22px; text-align: center; }
+  .p6 .cal .dia { font-size: 30px; font-weight: 600; opacity: 0.9; }
+  .p6 .cal .c { width: 104px; height: 104px; border-radius: 50%; background: var(--azul-claro); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 34px; margin: 0 auto; color: var(--blanco); }
+  .p6 .cal .c.vacio { background: transparent; }
+  .p6 .cal .c.hoy { background: var(--blanco); color: var(--azul); }
+  .p6 .cal .c.plazo { background: var(--lima); color: var(--carbon); box-shadow: 0 0 0 8px rgba(205,242,126,0.35); }
+  .p6 .leyenda { margin-top: 60px; display: flex; gap: 40px; font-size: 26px; font-weight: 500; }
+  .p6 .leyenda i { display: inline-block; width: 22px; height: 22px; border-radius: 50%; margin-right: 12px; vertical-align: -3px; }
+
+  /* 7 · Conecta */
+  .p7 h1 { font-size: 118px; letter-spacing: -4px; }
+  .p7 .nube { position: absolute; left: 70px; right: 70px; bottom: 150px; height: 400px; }
+  .p7 .nube span { position: absolute; font-size: 30px; font-weight: 600; padding: 12px 30px; border-radius: 999px; white-space: nowrap; }
+  .p7 .nube .r { background: var(--azul); color: var(--blanco); }
+  .p7 .nube .c { border: 3px solid var(--blanco); color: var(--blanco); }
+  .p7 .nube .l { background: var(--lima); color: var(--carbon); }
+
+  /* 8 · Pasos */
+  .p8 .tarjeta { position: absolute; left: 90px; right: 90px; top: 330px; bottom: 170px; background: var(--blanco); border-radius: 44px; padding: 70px 64px; color: var(--carbon); }
+  .p8 h1 { font-size: 84px; }
+  .p8 .etiqueta { font-size: 24px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--azul); }
+  .p8 .tarjeta h2 { font-size: 56px; font-weight: 600; letter-spacing: -1px; margin: 12px 0 46px; }
+  .p8 .paso { display: flex; gap: 34px; margin-bottom: 44px; }
+  .p8 .num { font-size: 44px; font-weight: 600; color: var(--azul); width: 70px; flex-shrink: 0; }
+  .p8 .paso b { font-size: 38px; font-weight: 600; display: block; }
+  .p8 .paso span { font-size: 27px; color: #5C5F69; line-height: 1.4; display: block; margin-top: 6px; }
+
+  /* 9 · Gestoría (móvil) */
+  .p9 h1 { font-size: 84px; max-width: 900px; }
+  .p9 .movil { position: absolute; left: 150px; right: 150px; top: 430px; height: 1100px; background: var(--blanco); border-radius: 70px; padding: 70px 46px; color: var(--carbon); box-shadow: 0 40px 80px rgba(0,0,0,0.35); }
+  .p9 .movil .t { font-size: 46px; font-weight: 600; letter-spacing: -1px; }
+  .p9 .movil .st { font-size: 22px; color: #71717A; }
+  .p9 .chips { display: flex; gap: 12px; margin: 30px 0; flex-wrap: wrap; }
+  .p9 .chips span { font-size: 20px; font-weight: 600; padding: 8px 20px; border-radius: 999px; border: 2px solid #E4E4E7; color: #71717A; }
+  .p9 .chips span.on { border-color: var(--amarillo); color: var(--amarillo); background: #FEF6E7; }
+  .p9 .item { display: flex; align-items: center; gap: 22px; border: 2px solid #E4E4E7; border-radius: 26px; padding: 22px 26px; margin-bottom: 18px; }
+  .p9 .item .ic { width: 64px; height: 64px; border-radius: 20px; background: #F1F1F2; }
+  .p9 .item b { font-size: 25px; display: block; }
+  .p9 .item small { font-size: 20px; color: #71717A; }
+  .p9 .item .badge { display: inline-block; margin-top: 6px; font-size: 18px; font-weight: 600; padding: 4px 14px; border-radius: 999px; background: #FEF6E7; color: var(--amarillo); }
+  .p9 .item .imp { margin-left: auto; font-weight: 600; font-size: 25px; }
+  .p9 .boton { margin-top: 26px; background: var(--carbon); color: var(--blanco); text-align: center; font-weight: 600; font-size: 26px; padding: 24px; border-radius: 22px; }
+  .p9 .sello { position: absolute; right: 70px; top: 380px; transform: rotate(8deg); z-index: 2; }
+
+  /* 10 · Cierre */
+  .p10 h1 { font-size: 168px; text-align: center; letter-spacing: -6px; line-height: 1.02; margin-top: 120px; }
+  .p10 .guion { font-weight: 500; letter-spacing: 6px; }
+  .p10 .pies { position: absolute; left: 90px; right: 90px; bottom: 90px; display: flex; justify-content: space-between; font-size: 26px; font-weight: 500; line-height: 1.4; opacity: 0.9; }
+</style>
+</head>
+<body>
+
+<!-- 1 · Portada -->
+<section class="post azul p1" id="post-01">
+  <span class="pildora lima">Nueva app</span>
+  <h1>Tus tickets,<br><em class="subrayado">en orden</em><br>en 3 segundos</h1>
+  <p class="bajada">Haz la foto y FacturaMétrica te dice al momento si Hacienda te lo acepta.</p>
+  <div class="tickets">
+    <div class="ticket">
+      <div class="linea" style="width:80%"></div><div class="linea"></div><div class="linea" style="width:60%"></div><div class="linea" style="width:70%"></div>
+      <div class="total">29,40 €</div>
+      <div class="estado" style="background:#DCFCE7;color:#15803D"><i style="background:#22C55E"></i>Deducible</div>
+    </div>
+    <div class="ticket" style="margin-top:80px">
+      <div class="linea" style="width:70%"></div><div class="linea"></div><div class="linea" style="width:50%"></div><div class="linea" style="width:80%"></div>
+      <div class="total">64,00 €</div>
+      <div class="estado" style="background:#FEF3C7;color:#B45309"><i style="background:#F59E0B"></i>Justificar</div>
+    </div>
+  </div>
+  <div class="marca">FacturaMétrica</div>
+</section>
+
+<!-- 2 · Dato fiscal -->
+<section class="post carbon p2" id="post-02">
+  <span class="pildora lima">Dato fiscal</span>
+  <div class="titulo">¿Comida de<br>trabajo?</div>
+  <p class="pequeno">Ojo con el límite diario de manutención en España sin pernocta. Si lo superas, tendrás que justificarlo ante Hacienda.</p>
+  <h1>26,67<small>€</small></h1>
+  <div class="marca">FacturaMétrica <span>· Art. 9 RIRPF</span></div>
+</section>
+
+<!-- 3 · Píldoras -->
+<section class="post azul p3" id="post-03">
+  <p class="encabezado">Todo lo que hace por ti</p>
+  <div class="lista">
+    <div><span class="pildora contorno">Captura</span></div>
+    <div><span class="pildora contorno">Lectura OCR</span></div>
+    <div><span class="pildora solida">Semáforo fiscal</span></div>
+    <div><span class="pildora contorno">Asesor virtual</span></div>
+    <div><span class="pildora contorno">Tu gestoría</span></div>
+  </div>
+  <div class="marca">FacturaMétrica</div>
+</section>
+
+<!-- 4 · Asesor Fiscal Virtual -->
+<section class="post carbon p4" id="post-04">
+  <h1>Tu <em class="subrayado">asesor fiscal</em><br>en el bolsillo</h1>
+  <div class="chat">
+    <div class="burbuja app"><span class="quien">Asesor virtual</span>Hola, detectamos este gasto en fin de semana. ¿Con qué cliente fue?</div>
+    <div class="burbuja yo">Comida con Construcciones Guadiana para cerrar el presupuesto de la obra.</div>
+    <div class="burbuja app"><span class="quien">Asesor virtual</span>¡Perfecto! Lo enviamos justificado a tu gestoría.</div>
+    <div class="burbuja yo">Así da gusto 🙌</div>
+  </div>
+  <div class="marca">FacturaMétrica</div>
+</section>
+
+<!-- 5 · Semáforo -->
+<section class="post gris p5" id="post-05">
+  <h1>El semáforo<br>que <em class="subrayado blanco-trazo">te protege</em></h1>
+  <div class="filas">
+    <div class="fila"><div class="luz" style="background:var(--verde)"></div><div><b>Verde</b><span>Deducible. Datos correctos y gasto ordinario de tu actividad.</span></div></div>
+    <div class="fila"><div class="luz" style="background:var(--amarillo)"></div><div><b>Amarillo</b><span>Necesita contexto: fin de semana, festivo o comida por encima del límite.</span></div></div>
+    <div class="fila"><div class="luz" style="background:var(--rojo)"></div><div><b>Rojo</b><span>No deducible: multas, sanciones o consumo personal.</span></div></div>
+  </div>
+  <div class="marca" style="color:var(--carbon)">FacturaMétrica</div>
+</section>
+
+<!-- 6 · Calendario -->
+<section class="post azul p6" id="post-06">
+  <div class="cabecera">
+    <div>
+      <h1>Cierre<br>trimestral</h1>
+      <span class="pildora lima">Modelos 303 y 130</span>
+    </div>
+    <div class="contador">días para<br>el plazo<b>5</b></div>
+  </div>
+  <div class="cal">
+    <div class="dia">L</div><div class="dia">M</div><div class="dia">X</div><div class="dia">J</div><div class="dia">V</div><div class="dia">S</div><div class="dia">D</div>
+    <div class="c">12</div><div class="c">13</div><div class="c">14</div><div class="c hoy">15</div><div class="c">16</div><div class="c">17</div><div class="c">18</div>
+    <div class="c">19</div><div class="c plazo">20</div><div class="c">21</div><div class="c">22</div><div class="c">23</div><div class="c">24</div><div class="c">25</div>
+  </div>
+  <div class="leyenda"><span><i style="background:var(--blanco)"></i>Hoy</span><span><i style="background:var(--lima)"></i>Fin del plazo del 3T</span></div>
+  <div class="marca">FacturaMétrica <span>· Te avisamos antes</span></div>
+</section>
+
+<!-- 7 · Del ticket a la gestoría -->
+<section class="post carbon p7" id="post-07">
+  <h1>Del ticket<br>a tu <em class="subrayado">gestoría</em><br>sin WhatsApp</h1>
+  <div class="nube">
+    <span class="r" style="left:40px;top:40px;transform:rotate(-8deg)">NIF</span>
+    <span class="c" style="left:230px;top:10px;transform:rotate(6deg)">Base imponible</span>
+    <span class="l" style="left:620px;top:60px;transform:rotate(-4deg)">IVA 21 %</span>
+    <span class="c" style="left:20px;top:190px;transform:rotate(10deg)">Fecha y hora</span>
+    <span class="r" style="left:330px;top:170px;transform:rotate(-12deg)">Cuenta PGC 629</span>
+    <span class="c" style="left:700px;top:200px;transform:rotate(14deg)">Total</span>
+    <span class="r" style="left:120px;top:320px;transform:rotate(3deg)">Justificación</span>
+    <span class="l" style="left:470px;top:310px;transform:rotate(-6deg)">Exportación CSV</span>
+  </div>
+  <div class="marca">FacturaMétrica</div>
+</section>
+
+<!-- 8 · Pasos -->
+<section class="post azul p8" id="post-08">
+  <h1>Empieza en<br><em>tres pasos</em></h1>
+  <div class="tarjeta">
+    <span class="etiqueta">Así funciona</span>
+    <h2>Del papel a la contabilidad</h2>
+    <div class="paso"><div class="num">01</div><div><b>Haz la foto</b><span>Cámara, galería o PDF del correo. Leemos NIF, importes e IVA.</span></div></div>
+    <div class="paso"><div class="num">02</div><div><b>Mira el semáforo</b><span>Si un gasto es dudoso, el asesor virtual te pide el motivo.</span></div></div>
+    <div class="paso"><div class="num">03</div><div><b>Tu gestoría lo recibe</b><span>Clasificado, con su cuenta contable y listo para exportar.</span></div></div>
+  </div>
+  <div class="marca">FacturaMétrica</div>
+</section>
+
+<!-- 9 · Para gestorías -->
+<section class="post carbon p9" id="post-09">
+  <h1>Y para tu gestoría, <em class="subrayado">una bandeja</em> ordenada</h1>
+  <span class="pildora lima sello">Aprobar en 1 clic</span>
+  <div class="movil">
+    <div class="st">Gastos de toda la cartera</div>
+    <div class="t">Bandeja</div>
+    <div class="chips"><span class="on">Por revisar (2)</span><span>Verde (31)</span><span>Rojo (5)</span></div>
+    <div class="item"><div class="ic"></div><div><b>Mesón La Alcazaba</b><small>Carlos M. · 7 oct</small><br><span class="badge">● En revisión</span></div><div class="imp">45,00 €</div></div>
+    <div class="item"><div class="ic"></div><div><b>Restaurante El Puente</b><small>Ana R. · 5 oct</small><br><span class="badge">● En revisión</span></div><div class="imp">64,00 €</div></div>
+    <div class="boton">Exportar a A3 · Sage · Excel</div>
+  </div>
+</section>
+
+<!-- 10 · Cierre -->
+<section class="post azul p10" id="post-10">
+  <h1>Factura<br>Métrica<br><span class="guion">-para-</span><br>autónomos</h1>
+  <div class="pies">
+    <span>El filtro fiscal<br>preventivo</span>
+    <span style="text-align:right">Proyecto DAM<br>IES Albarregas</span>
+  </div>
+</section>
+
+</body>
+</html>
