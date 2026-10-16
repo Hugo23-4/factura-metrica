@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diagrama de clases FacturaMétrica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --texto: #18181B; --secundario: #71717A; --borde: #D4D4D8; --lienzo: #F4F4F5; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--lienzo); color: var(--texto); }
+  #lienzo { position: relative; width: 2560px; height: 2100px; background: var(--lienzo); }
+  svg#lineas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; }
+
+  .titulo { position: absolute; left: 60px; top: 40px; }
+  .titulo h1 { font-size: 40px; font-weight: 700; letter-spacing: -1px; }
+  .titulo p { font-size: 19px; color: var(--secundario); margin-top: 6px; }
+  .seccion { position: absolute; left: 60px; font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--secundario); }
+  .separador { position: absolute; left: 60px; right: 60px; border-top: 2px dashed #D4D4D8; }
+
+  .clase { position: absolute; background: #fff; border: 1.5px solid var(--texto); border-radius: 6px; overflow: hidden; z-index: 1; }
+  .clase .cabecera { text-align: center; padding: 10px 14px; border-bottom: 1.5px solid var(--texto); background: #FAFAFA; }
+  .clase .estereotipo { font-size: 13px; color: var(--secundario); }
+  .clase .nombre { font-size: 20px; font-weight: 700; }
+  .clase.abstracta .nombre { font-style: italic; }
+  .clase .compartimento { padding: 8px 14px; font-family: 'JetBrains Mono', monospace; font-size: 14.5px; line-height: 28px; }
+  .clase .compartimento + .compartimento { border-top: 1.5px solid var(--texto); }
+  .clase .compartimento.vacio { min-height: 14px; padding: 0; }
+  .clase.enumeracion .cabecera { background: #F4F4F5; }
+  .clase.contexto .cabecera { background: #18181B; color: #fff; }
+  .clase.contexto .estereotipo { color: #A1A1AA; }
+  .clase.servicio .cabecera { background: #E4E4E7; }
+  .tipo { color: #1D4ED8; }
+  .privado { color: var(--secundario); }
+
+  .etiqueta { position: absolute; font-size: 14px; font-weight: 600; color: #3F3F46; background: var(--lienzo); padding: 0 4px; z-index: 3; white-space: nowrap; }
+  .etiqueta.mult { font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+  .leyenda { position: absolute; left: 60px; bottom: 34px; display: flex; gap: 34px; align-items: center; font-size: 16px; color: var(--secundario); }
+  .leyenda svg { vertical-align: middle; margin-right: 8px; }
+</style>
+</head>
+<body>
+<div id="lienzo">
+  <div class="titulo">
+    <h1>Diagrama de clases · FacturaMétrica</h1>
+    <p>App móvil (React Native + Expo, TypeScript) · Modelo de dominio y lógica de la aplicación</p>
+  </div>
+  <div class="seccion" style="top:140px">Modelo de dominio</div>
+  <div class="separador" style="top:1110px"></div>
+  <div class="seccion" style="top:1130px">Lógica de la aplicación</div>
+  <div id="clases"></div>
+  <svg id="lineas"></svg>
+  <div class="leyenda">
+    <span><svg width="70" height="20"><line x1="2" y1="10" x2="68" y2="10" stroke="#3F3F46" stroke-width="2"/></svg>Asociación</span>
+    <span><svg width="70" height="20"><line x1="2" y1="10" x2="50" y2="10" stroke="#3F3F46" stroke-width="2"/><path d="M50 10 L59 4 L68 10 L59 16 Z" fill="#3F3F46"/></svg>Composición</span>
+    <span><svg width="70" height="20"><line x1="2" y1="10" x2="52" y2="10" stroke="#3F3F46" stroke-width="2"/><path d="M52 3 L68 10 L52 17 Z" fill="#fff" stroke="#3F3F46" stroke-width="2"/></svg>Herencia</span>
+    <span><svg width="70" height="20"><line x1="2" y1="10" x2="66" y2="10" stroke="#3F3F46" stroke-width="2" stroke-dasharray="6 5"/><path d="M56 4 L67 10 L56 16" fill="none" stroke="#3F3F46" stroke-width="2"/></svg>Dependencia (usa)</span>
+    <span><b style="color:#3F3F46">+</b> público &nbsp; <b style="color:#3F3F46">−</b> privado &nbsp; <b style="color:#3F3F46">?</b> opcional</span>
+  </div>
+</div>
+
+<script>
+const t = (s) => `<span class="tipo">${s}</span>`;
+const p = (s) => `<span class="privado">${s}</span>`;
+
+const CLASES = [
+  // ---------------- Modelo de dominio ----------------
+  { id: 'asesoria', nombre: 'Asesoria', x: 60, y: 180, w: 430, atributos: [
+    `+ id: ${t('string')}`, `+ codigoInvitacion: ${t('string')}`, `+ cif: ${t('string')}`,
+    `+ razonSocial: ${t('string')}`, `+ emailContacto: ${t('string')}`, `+ telefono: ${t('string')}`,
+    `+ plan: ${t("'basico' | 'profesional'")}`] },
+  { id: 'usuario', nombre: 'Usuario', x: 580, y: 180, w: 450, atributos: [
+    `+ id: ${t('string')}`, `+ rol: ${t('Rol')}`, `+ asesoriaId: ${t('string')}`, `+ nombre: ${t('string')}`,
+    `+ email: ${t('string')}`, p(`− passwordHash: string`), `+ activo: ${t('boolean')}`,
+    `+ creadoEn: ${t('string')}`, `+ nif: ${t('string')}`, `+ actividad: ${t('string')}`,
+    `+ telefono?: ${t('string')}`, `+ domicilioFiscal?: ${t('string')}`, `+ gestorId?: ${t('string')}`,
+    `+ recordatorios: ${t('boolean')}`] },
+  { id: 'gasto', nombre: 'Gasto', x: 1110, y: 180, w: 500, atributos: [
+    `+ id: ${t('string')}`, `+ clienteId: ${t('string')}`, `+ asesoriaId: ${t('string')}`,
+    `+ semaforo: ${t('Semaforo')}`, `+ motivoRiesgo?: ${t('string')}`, `+ preguntaAsesor?: ${t('string')}`,
+    `+ cuentaPgc: ${t('string')}`, `+ justificacion?: ${t('Justificacion')}`, `+ revision?: ${t('Revision')}`,
+    `+ nota?: ${t('string')}`, `+ imagenUri?: ${t('string')}`, `+ hashDocumento?: ${t('string')}`,
+    `+ creadoEn: ${t('string')}`, `+ enviadoEn?: ${t('string')}`, `+ exportacionId?: ${t('string')}`] },
+  { id: 'datos', nombre: 'DatosExtraidos', x: 1700, y: 180, w: 420, atributos: [
+    `+ fechaEmision: ${t('string')}`, `+ nifEmisor: ${t('string | null')}`, `+ razonSocialEmisor: ${t('string')}`,
+    `+ nifReceptor: ${t('string | null')}`, `+ baseImponible: ${t('number')}`, `+ tipoIva: ${t('number')}`,
+    `+ cuotaIva: ${t('number')}`, `+ total: ${t('number')}`, `+ categoria: ${t('Categoria')}`,
+    `+ tipoDocumento: ${t('TipoDocumento')}`] },
+  { id: 'exportacion', nombre: 'Exportacion', x: 60, y: 560, w: 430, atributos: [
+    `+ id: ${t('string')}`, `+ asesoriaId: ${t('string')}`, `+ gestorId: ${t('string')}`,
+    `+ trimestre: ${t('number')}`, `+ anio: ${t('number')}`, `+ formato: ${t("'csv' | 'json'")}`,
+    `+ numAsientos: ${t('number')}`, `+ totalImporte: ${t('number')}`, `+ fecha: ${t('string')}`] },
+  { id: 'revision', nombre: 'Revision', x: 580, y: 760, w: 450, atributos: [
+    `+ decision: ${t("'aprobado' | 'rechazado'")}`, `+ comentario?: ${t('string')}`,
+    `+ gestorId: ${t('string')}`, `+ fecha: ${t('string')}`] },
+  { id: 'justificacion', nombre: 'Justificacion', x: 1700, y: 640, w: 420, atributos: [
+    `+ motivoProfesional: ${t('string')}`, `+ clienteNombre?: ${t('string')}`,
+    `+ clienteNif?: ${t('string')}`, `+ fecha: ${t('string')}`] },
+  { id: 'resultado', nombre: 'ResultadoEvaluacion', x: 1700, y: 880, w: 420, atributos: [
+    `+ semaforo: ${t('Semaforo')}`, `+ motivoRiesgo?: ${t('string')}`,
+    `+ preguntaAsesor?: ${t('string')}`, `+ cuentaPgc: ${t('string')}`] },
+
+  { id: 'rol', nombre: 'Rol', tipo: 'enumeracion', x: 2200, y: 180, w: 300, literales: ['admin', 'cliente'] },
+  { id: 'semaforo', nombre: 'Semaforo', tipo: 'enumeracion', x: 2200, y: 330, w: 300, literales: ['verde', 'amarillo', 'rojo'] },
+  { id: 'tipodoc', nombre: 'TipoDocumento', tipo: 'enumeracion', x: 2200, y: 508, w: 300, literales: ['ticket', 'factura_pdf', 'factura_imagen'] },
+  { id: 'estado', nombre: 'EstadoGasto', tipo: 'enumeracion', x: 2200, y: 686, w: 300, literales: ['validado', 'pendiente', 'justificado', 'no_deducible', 'aprobado', 'rechazado', 'exportado'] },
+
+  // ---------------- Lógica de la aplicación ----------------
+  { id: 'sesion', nombre: 'SesionContext', tipo: 'contexto', x: 60, y: 1180, w: 640,
+    atributos: [p('− usuarios: Usuario[]'), `+ usuario: ${t('Usuario | null')}`, `+ cargando: ${t('boolean')}`],
+    metodos: [
+      `+ iniciarSesion(email, contrasena): ${t('Promise&lt;string | null&gt;')}`,
+      `+ registrarse(datos, codigoAsesoria): ${t('Promise&lt;string | null&gt;')}`,
+      `+ cerrarSesion(): ${t('void')}`,
+      `+ crearCliente(datos): ${t('Promise&lt;string | null&gt;')}`,
+      `+ actualizarUsuario(id, datos): ${t('Promise&lt;string | null&gt;')}`,
+      `+ cambiarActivo(id, activo): ${t('void')}`,
+      `+ cambiarRecordatorios(activar): ${t('void')}`,
+      `+ eliminarUsuario(id): ${t('boolean')}`,
+      `+ restablecerUsuarios(): ${t('void')}`,
+      p('− puedeGestionar(objetivo): boolean')] },
+  { id: 'gastosctx', nombre: 'GastosContext', tipo: 'contexto', x: 740, y: 1180, w: 640,
+    atributos: [`+ gastos: ${t('Gasto[]')}`, `+ exportaciones: ${t('Exportacion[]')}`, `+ borrador: ${t('Borrador | null')}`],
+    metodos: [
+      `+ registrarGasto(borrador, nota?): ${t('Gasto | null')}`,
+      `+ actualizarGasto(id, datos, nota?): ${t('Gasto')}`,
+      `+ justificarGasto(id, justificacion): ${t('void')}`,
+      `+ enviarAGestoria(ids): ${t('void')}`,
+      `+ revisarGasto(id, decision, comentario?): ${t('void')}`,
+      `+ rectificarGasto(id, cambios): ${t('void')}`,
+      `+ exportarGastos(ids, trimestre, anio, formato): ${t('Exportacion')}`,
+      `+ eliminarGasto(id): ${t('void')}`,
+      `+ eliminarGastosDeCliente(clienteId): ${t('void')}`,
+      `+ restablecerGastos(): ${t('void')}`,
+      p('− puedeAcceder(gasto): boolean')] },
+  { id: 'motor', nombre: 'MotorReglasFiscales', tipo: 'servicio', x: 1430, y: 1180, w: 520,
+    metodos: [`+ evaluarGasto(datos: DatosExtraidos): ${t('ResultadoEvaluacion')}`] },
+  { id: 'estadosvc', nombre: 'ServicioEstadoGasto', tipo: 'servicio', x: 1430, y: 1340, w: 520,
+    metodos: [`+ estadoDe(gasto): ${t('EstadoGasto')}`, `+ esDeducible(gasto): ${t('boolean')}`,
+      `+ esExportable(gasto): ${t('boolean')}`, `+ ivaDeducible(gasto): ${t('number')}`,
+      `+ baseDeducible(gasto): ${t('number')}`] },
+  { id: 'exportsvc', nombre: 'ServicioExportacion', tipo: 'servicio', x: 1430, y: 1600, w: 520,
+    metodos: [`+ crearAsientos(gastos, clientes): ${t('AsientoExportado[]')}`,
+      `+ generarCsv(asientos): ${t('string')}`, `+ generarJson(asientos, metadatos): ${t('string')}`] },
+  { id: 'notif', nombre: 'ServicioNotificaciones', tipo: 'servicio', x: 1430, y: 1800, w: 520,
+    metodos: [`+ programarRecordatorios(pendientes): ${t('Promise&lt;boolean&gt;')}`,
+      `+ cancelarRecordatorios(): ${t('Promise&lt;void&gt;')}`] },
+  { id: 'ocr', nombre: 'ServicioOCR', tipo: 'servicio', x: 1990, y: 1180, w: 510,
+    metodos: [`+ analizarComprobante(uri, tipo): ${t('Promise&lt;DatosExtraidos&gt;')}`,
+      p('− analizarEnServidor(uri, tipo)'), p('− analizarSimulado(tipo)')] },
+  { id: 'documentos', nombre: 'ServicioDocumentos', tipo: 'servicio', x: 1990, y: 1400, w: 510,
+    metodos: [`+ calcularHuella(uri): ${t('Promise&lt;string&gt;')}`,
+      `+ compartirArchivo(nombre, contenido, mime): ${t('Promise&lt;void&gt;')}`] },
+  { id: 'auth', nombre: 'ServicioAuth', tipo: 'servicio', x: 1990, y: 1600, w: 510,
+    metodos: [`+ cifrarContrasena(contrasena): ${t('Promise&lt;string&gt;')}`,
+      `+ comprobarContrasena(contrasena, hash): ${t('Promise&lt;boolean&gt;')}`,
+      `+ validarDatosUsuario(datos, opciones): ${t('ErroresUsuario')}`,
+      `+ emailEnUso(usuarios, email): ${t('boolean')}`] },
+];
+
+const ESTEREOTIPO = { enumeracion: '«enumeration»', contexto: '«context»', servicio: '«service»' };
+const contenedor = document.getElementById('clases');
+for (const c of CLASES) {
+  const div = document.createElement('div');
+  div.className = `clase ${c.tipo ?? ''}`;
+  div.id = c.id;
+  Object.assign(div.style, { left: `${c.x}px`, top: `${c.y}px`, width: `${c.w}px` });
+  let html = `<div class="cabecera">${c.tipo ? `<div class="estereotipo">${ESTEREOTIPO[c.tipo]}</div>` : ''}<div class="nombre">${c.nombre}</div></div>`;
+  if (c.literales) {
+    html += `<div class="compartimento">${c.literales.join('<br>')}</div>`;
+  } else {
+    html += c.atributos ? `<div class="compartimento">${c.atributos.join('<br>')}</div>` : '<div class="compartimento vacio"></div>';
+    html += c.metodos ? `<div class="compartimento">${c.metodos.join('<br>')}</div>` : '<div class="compartimento vacio"></div>';
+  }
+  div.innerHTML = html;
+  contenedor.appendChild(div);
+}
+
+const lienzo = document.getElementById('lienzo');
+const caja = (id) => {
+  const r = document.getElementById(id).getBoundingClientRect();
+  const l = lienzo.getBoundingClientRect();
+  return { x: r.left - l.left, y: r.top - l.top, w: r.width, h: r.height };
+};
+/** Punto de anclaje en un lado de la clase; `f` es la posición relativa a lo largo del lado. */
+function ancla(id, lado, f = 0.5) {
+  const c = caja(id);
+  if (lado === 'izq') return { x: c.x, y: c.y + c.h * f };
+  if (lado === 'der') return { x: c.x + c.w, y: c.y + c.h * f };
+  if (lado === 'sup') return { x: c.x + c.w * f, y: c.y };
+  return { x: c.x + c.w * f, y: c.y + c.h };
+}
+
+/*
+ * Relaciones. `ruta` son las coordenadas intermedias, alternando tramos: si la línea sale por un
+ * lado izquierdo o derecho, el primer valor es una x; si sale por arriba o abajo, una y.
+ */
+const RELACIONES = [
+  { tipo: 'asociacion', de: ['usuario', 'izq', 0.12], a: ['asesoria', 'der', 0.18], ruta: [535], mDe: '*', mA: '1', etiqueta: 'pertenece a' },
+  { tipo: 'asociacion', de: ['usuario', 'inf', 0.06], a: ['usuario', 'inf', 0.38], ruta: [728], mDe: 'clientes *', mA: 'gestor 0..1', posDe: [679, 690], posA: [679, 712] },
+  { tipo: 'asociacion', de: ['gasto', 'izq', 0.12], a: ['usuario', 'der', 0.2], ruta: [1070], mDe: '*', mA: '1', etiqueta: 'cliente' },
+  { tipo: 'asociacion', de: ['gasto', 'sup', 0.15], a: ['asesoria', 'sup', 0.78], ruta: [152], mDe: '*', mA: '1' },
+  { tipo: 'herencia', de: ['gasto', 'der', 0.3], a: ['datos', 'izq', 0.3], ruta: [1655] },
+  { tipo: 'composicion', de: ['gasto', 'der', 0.82], a: ['justificacion', 'izq', 0.4], ruta: [1655], mA: '0..1' },
+  { tipo: 'composicion', de: ['gasto', 'izq', 0.9], a: ['revision', 'der', 0.35], ruta: [1070], mA: '0..1' },
+  { tipo: 'asociacion', de: ['revision', 'sup', 0.5], a: ['usuario', 'inf', 0.5], ruta: [], mDe: '*', mA: '1', etiqueta: 'gestor' },
+  { tipo: 'asociacion', de: ['exportacion', 'sup', 0.5], a: ['asesoria', 'inf', 0.5], ruta: [], mDe: '*', mA: '1' },
+  { tipo: 'asociacion', de: ['exportacion', 'inf', 0.7], a: ['gasto', 'izq', 0.97], ruta: [1036, 1090], mDe: '0..1', mA: '*', etiqueta: 'agrupa' },
+  { tipo: 'dependencia', de: ['motor', 'sup', 0.72], a: ['resultado', 'inf', 0.3], ruta: [], etiqueta: 'devuelve' },
+  { tipo: 'dependencia', de: ['motor', 'der', 0.4], a: ['datos', 'der', 0.55], ruta: [2140], etiqueta: 'evalúa', posEtiqueta: [2140, 600] },
+  { tipo: 'dependencia', de: ['ocr', 'sup', 0.33], a: ['datos', 'der', 0.8], ruta: [], etiqueta: 'crea', posEtiqueta: [2158, 1000] },
+  { tipo: 'asociacion', de: ['sesion', 'sup', 0.5], a: ['usuario', 'izq', 0.55], ruta: [1062, 545], mDe: '1', mA: '*', etiqueta: 'gestiona' },
+  { tipo: 'asociacion', de: ['gastosctx', 'sup', 0.85], a: ['gasto', 'inf', 0.4], ruta: [1080, 1310], mDe: '1', mA: '*', etiqueta: 'gestiona' },
+  { tipo: 'asociacion', de: ['gastosctx', 'sup', 0.12], a: ['exportacion', 'inf', 0.3], ruta: [1088, 189], mDe: '1', mA: '*', etiqueta: 'gestiona' },
+  { tipo: 'dependencia', de: ['gastosctx', 'izq', 0.12], a: ['sesion', 'der', 0.12], ruta: [], etiqueta: 'usa' },
+  { tipo: 'dependencia', de: ['gastosctx', 'der', 0.08], a: ['motor', 'izq', 0.5], ruta: [] },
+  { tipo: 'dependencia', de: ['gastosctx', 'der', 0.4], a: ['estadosvc', 'izq', 0.4], ruta: [] },
+  { tipo: 'dependencia', de: ['sesion', 'inf', 0.3], a: ['auth', 'inf', 0.5], ruta: [1972], etiqueta: 'usa' },
+  { tipo: 'dependencia', de: ['sesion', 'inf', 0.7], a: ['notif', 'inf', 0.5], ruta: [1952] },
+  { tipo: 'dependencia', de: ['estadosvc', 'der', 0.5], a: ['estado', 'inf', 0.5], ruta: [1965, 1120, 2350] },
+];
+
+const svg = document.getElementById('lineas');
+const NS = 'http://www.w3.org/2000/svg';
+const COLOR = '#3F3F46';
+
+function dibujar(d, { discontinua = false, relleno = 'none' } = {}) {
+  const el = document.createElementNS(NS, 'path');
+  el.setAttribute('d', d);
+  el.setAttribute('fill', relleno);
+  el.setAttribute('stroke', COLOR);
+  el.setAttribute('stroke-width', '2');
+  el.setAttribute('stroke-linejoin', 'round');
+  if (discontinua) el.setAttribute('stroke-dasharray', '7 6');
+  svg.appendChild(el);
+}
+
+function etiqueta(texto, x, y, clase = '') {
+  const el = document.createElement('div');
+  el.className = `etiqueta ${clase}`;
+  el.textContent = texto;
+  lienzo.appendChild(el);
+  const { width, height } = el.getBoundingClientRect();
+  el.style.left = `${x - width / 2}px`;
+  el.style.top = `${y - height / 2}px`;
+}
+
+/** Construye los puntos de una ruta ortogonal. */
+function puntos(a, ladoA, ruta, b, ladoB) {
+  const ps = [a];
+  let horizontal = ladoA === 'izq' || ladoA === 'der';
+  let actual = { ...a };
+  for (const v of ruta) {
+    actual = horizontal ? { x: v, y: actual.y } : { x: actual.x, y: v };
+    ps.push(actual);
+    horizontal = !horizontal;
+  }
+  const llegaHorizontal = ladoB === 'izq' || ladoB === 'der';
+  if (horizontal && llegaHorizontal && actual.y !== b.y) {
+    const mx = (actual.x + b.x) / 2;
+    ps.push({ x: mx, y: actual.y }, { x: mx, y: b.y });
+  } else if (!horizontal && !llegaHorizontal && actual.x !== b.x) {
+    const my = (actual.y + b.y) / 2;
+    ps.push({ x: actual.x, y: my }, { x: b.x, y: my });
+  } else if (horizontal) {
+    ps.push({ x: b.x, y: actual.y });
+  } else {
+    ps.push({ x: actual.x, y: b.y });
+  }
+  ps.push(b);
+  return ps.filter((q, i) => i === 0 || q.x !== ps[i - 1].x || q.y !== ps[i - 1].y);
+}
+
+/** Dirección unitaria del último tramo, apuntando hacia el extremo. */
+function direccion(desde, hasta) {
+  const dx = Math.sign(hasta.x - desde.x);
+  const dy = Math.sign(hasta.y - desde.y);
+  return { dx, dy };
+}
+
+function rotar(x, y, { dx, dy }) {
+  // Convierte coordenadas locales (x hacia delante, y lateral) a globales.
+  return { x: x * dx - y * dy, y: x * dy + y * dx };
+}
+
+function forma(punta, dir, local, cerrada) {
+  const pts = local.map(([x, y]) => {
+    const r = rotar(x, y, dir);
+    return `${punta.x + r.x} ${punta.y + r.y}`;
+  });
+  return `M ${pts.join(' L ')}${cerrada ? ' Z' : ''}`;
+}
+
+for (const r of RELACIONES) {
+  const a = ancla(...r.de);
+  const b = ancla(...r.a);
+  const ps = puntos(a, r.de[1], r.ruta, b, r.a[1]);
+  const extremoFinal = direccion(ps[ps.length - 2], ps[ps.length - 1]);
+  const extremoInicial = direccion(ps[1], ps[0]);
+  const discontinua = r.tipo === 'dependencia';
+
+  // Se recorta la línea donde empieza el adorno para que no lo atraviese.
+  const recorteFinal = r.tipo === 'herencia' ? 16 : 0;
+  const recorteInicial = r.tipo === 'composicion' ? 20 : 0;
+  const tramos = ps.map((q) => ({ ...q }));
+  tramos[tramos.length - 1].x -= extremoFinal.dx * recorteFinal;
+  tramos[tramos.length - 1].y -= extremoFinal.dy * recorteFinal;
+  tramos[0].x -= extremoInicial.dx * recorteInicial;
+  tramos[0].y -= extremoInicial.dy * recorteInicial;
+  dibujar(`M ${tramos.map((q) => `${q.x} ${q.y}`).join(' L ')}`, { discontinua });
+
+  if (r.tipo === 'herencia') {
+    dibujar(forma(b, extremoFinal, [[0, 0], [-16, -9], [-16, 9]], true), { relleno: '#fff' });
+  }
+  if (r.tipo === 'dependencia') {
+    dibujar(forma(b, extremoFinal, [[-12, -7], [0, 0], [-12, 7]], false));
+  }
+  if (r.tipo === 'composicion') {
+    dibujar(forma(a, extremoInicial, [[0, 0], [-10, -7], [-20, 0], [-10, 7]], true), { relleno: COLOR });
+  }
+
+  // Multiplicidades junto a cada extremo y etiqueta en el tramo más largo.
+  const desplazar = (p0, dir, delante, lado) => {
+    const r2 = rotar(-delante, lado, dir);
+    return { x: p0.x + r2.x, y: p0.y + r2.y };
+  };
+  if (r.mDe) {
+    const q = r.posDe ? { x: r.posDe[0], y: r.posDe[1] } : desplazar(a, extremoInicial, 22, 16);
+    etiqueta(r.mDe, q.x, q.y, 'mult');
+  }
+  if (r.mA) {
+    const q = r.posA ? { x: r.posA[0], y: r.posA[1] } : desplazar(b, extremoFinal, 26, 16);
+    etiqueta(r.mA, q.x, q.y, 'mult');
+  }
+  if (r.posEtiqueta) {
+    etiqueta(r.etiqueta, ...r.posEtiqueta);
+  } else if (r.etiqueta) {
+    let mejor = 0; let largo = -1;
+    for (let i = 0; i < ps.length - 1; i++) {
+      const l = Math.abs(ps[i + 1].x - ps[i].x) + Math.abs(ps[i + 1].y - ps[i].y);
+      if (l > largo) { largo = l; mejor = i; }
+    }
+    const m = { x: (ps[mejor].x + ps[mejor + 1].x) / 2, y: (ps[mejor].y + ps[mejor + 1].y) / 2 };
+    etiqueta(r.etiqueta, m.x, m.y);
+  }
+}
+</script>
+</body>
+</html>
