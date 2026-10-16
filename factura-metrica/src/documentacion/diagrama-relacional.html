@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Modelo relacional FacturaMétrica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --texto: #18181B;
+    --secundario: #71717A;
+    --borde: #D4D4D8;
+    --fondo: #FFFFFF;
+    --lienzo: #F4F4F5;
+    --pk: #B45309;
+    --fk: #1D4ED8;
+    --linea: #52525B;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--lienzo); color: var(--texto); }
+  #lienzo { position: relative; width: 2560px; height: 1720px; background: var(--lienzo); }
+  svg#lineas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+  .titulo { position: absolute; left: 60px; top: 44px; }
+  .titulo h1 { font-size: 40px; font-weight: 700; letter-spacing: -1px; }
+  .titulo p { font-size: 19px; color: var(--secundario); margin-top: 6px; }
+
+  .tabla { position: absolute; width: 520px; background: var(--fondo); border: 1.5px solid var(--borde); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 0 rgba(0,0,0,0.03); z-index: 1; }
+  .tabla header { background: var(--texto); color: #fff; padding: 14px 20px; display: flex; justify-content: space-between; align-items: baseline; }
+  .tabla header b { font-size: 21px; font-weight: 600; }
+  .tabla header span { font-size: 14px; color: #A1A1AA; }
+  .tabla.dominio header { background: #1E3A8A; }
+  .tabla.catalogo header { background: #3F3F46; }
+  .fila { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; height: 36px; padding: 0 18px 0 12px; border-top: 1px solid #F0F0F2; font-size: 16px; }
+  .fila .clave { font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+  .fila .clave.pk { color: var(--pk); }
+  .fila .clave.fk { color: var(--fk); }
+  .fila .clave.uq { color: var(--secundario); }
+  .fila .nombre { font-weight: 500; }
+  .fila.es-pk .nombre { font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .fila.es-fk .nombre { color: var(--fk); }
+  .fila .tipo { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--secundario); }
+
+  .leyenda { position: absolute; left: 60px; bottom: 44px; display: flex; gap: 36px; align-items: center; font-size: 16px; color: var(--secundario); }
+  .leyenda .clave { font-weight: 700; font-size: 13px; margin-right: 6px; }
+  .leyenda svg { vertical-align: middle; margin-right: 8px; }
+  .nota { position: absolute; right: 60px; bottom: 44px; font-size: 15px; color: var(--secundario); text-align: right; line-height: 1.5; max-width: 860px; }
+</style>
+</head>
+<body>
+<div id="lienzo">
+  <svg id="lineas"></svg>
+  <div class="titulo">
+    <h1>Modelo relacional de la base de datos · FacturaMétrica</h1>
+    <p>PostgreSQL · Tercera forma normal · Aislamiento multi-tenant por asesoría</p>
+  </div>
+  <div id="tablas"></div>
+  <div class="leyenda">
+    <span><span class="clave" style="color:var(--pk)">PK</span>Clave primaria</span>
+    <span><span class="clave" style="color:var(--fk)">FK</span>Clave foránea</span>
+    <span><span class="clave">UQ</span>Valor único</span>
+    <span><svg width="64" height="20"><line x1="2" y1="10" x2="62" y2="10" stroke="#52525B" stroke-width="2"/><line x1="12" y1="3" x2="12" y2="17" stroke="#52525B" stroke-width="2"/><path d="M48 10 L62 3 M48 10 L62 17 M48 10 L62 10" stroke="#52525B" stroke-width="2" fill="none"/></svg>Uno a muchos (1:N)</span>
+    <span><svg width="64" height="20"><line x1="2" y1="10" x2="62" y2="10" stroke="#52525B" stroke-width="2"/><line x1="12" y1="3" x2="12" y2="17" stroke="#52525B" stroke-width="2"/><line x1="52" y1="3" x2="52" y2="17" stroke="#52525B" stroke-width="2"/></svg>Uno a uno (1:1)</span>
+    <span><svg width="64" height="20"><line x1="2" y1="10" x2="62" y2="10" stroke="#52525B" stroke-width="2" stroke-dasharray="6 5"/></svg>Relación opcional</span>
+  </div>
+  <div class="nota">Todas las tablas con datos de clientes incluyen <b>asesoria_id</b> para filtrar cada consulta por despacho.<br>
+    Estados del gasto (DFE): VERDE_DEDUCIBLE · AMARILLO_PENDIENTE_JUSTIFICACION · AMARILLO_JUSTIFICADO · ROJO_NO_DEDUCIBLE · APROBADO_GESTOR · EXPORTADO_CONTABILIZADO</div>
+</div>
+
+<script>
+const TABLAS = [
+  { id: 'asesorias', titulo: 'asesorias', subtitulo: 'Despachos (inquilinos)', x: 60, y: 170, filas: [
+    ['PK', 'id', 'UUID'],
+    ['UQ', 'cif', 'VARCHAR(9)'],
+    ['', 'razon_social', 'VARCHAR(150)'],
+    ['', 'email_contacto', 'VARCHAR(120)'],
+    ['', 'telefono', 'VARCHAR(20)'],
+    ['UQ', 'codigo_invitacion', 'VARCHAR(12)'],
+    ['', 'plan_suscripcion', 'ENUM'],
+    ['', 'activo', 'BOOLEAN'],
+    ['', 'created_at', 'TIMESTAMPTZ'],
+  ]},
+  { id: 'usuarios', titulo: 'usuarios', subtitulo: 'Acceso y roles', x: 700, y: 170, filas: [
+    ['PK', 'id', 'UUID'],
+    ['FK', 'asesoria_id', 'UUID'],
+    ['UQ', 'email', 'VARCHAR(120)'],
+    ['', 'password_hash', 'VARCHAR(60)'],
+    ['', 'rol', 'ENUM(ADMIN, AUTONOMO)'],
+    ['', 'nombre', 'VARCHAR(80)'],
+    ['', 'apellidos', 'VARCHAR(120)'],
+    ['', 'activo', 'BOOLEAN'],
+    ['', 'created_at', 'TIMESTAMPTZ'],
+  ]},
+  { id: 'clientes', titulo: 'clientes_autonomos', subtitulo: 'Cartera de la asesoría', x: 1340, y: 170, filas: [
+    ['PK', 'id', 'UUID'],
+    ['FK', 'usuario_id', 'UUID · UQ'],
+    ['FK', 'asesoria_id', 'UUID'],
+    ['FK', 'gestor_id', 'UUID'],
+    ['UQ', 'nif', 'VARCHAR(9)'],
+    ['', 'nombre_fiscal', 'VARCHAR(150)'],
+    ['', 'actividad_iae', 'VARCHAR(120)'],
+    ['', 'telefono', 'VARCHAR(20)'],
+    ['', 'domicilio_fiscal', 'VARCHAR(200)'],
+    ['', 'recordatorios', 'BOOLEAN'],
+    ['', 'fecha_alta', 'DATE'],
+  ]},
+  { id: 'cuentas', titulo: 'cuentas_pgc', subtitulo: 'Plan General Contable', clase: 'catalogo', x: 1980, y: 170, filas: [
+    ['PK', 'id', 'UUID'],
+    ['UQ', 'codigo', 'VARCHAR(10)'],
+    ['', 'descripcion', 'VARCHAR(150)'],
+    ['', 'tipo_cuenta', 'VARCHAR(30)'],
+    ['', 'cuenta_asociada_iva', 'VARCHAR(10)'],
+  ]},
+  { id: 'categorias', titulo: 'categorias_gasto', subtitulo: 'Reglas por categoría', clase: 'catalogo', x: 1980, y: 470, filas: [
+    ['PK', 'id', 'UUID'],
+    ['FK', 'cuenta_pgc_defecto_id', 'UUID'],
+    ['UQ', 'nombre', 'VARCHAR(60)'],
+    ['', 'descripcion', 'TEXT'],
+    ['', 'requiere_justificacion_finde', 'BOOLEAN'],
+    ['', 'es_manutencion', 'BOOLEAN'],
+    ['', 'no_afecto', 'BOOLEAN'],
+    ['', 'deducible_irpf_pct', 'NUMERIC(5,2)'],
+    ['', 'deducible_iva_pct', 'NUMERIC(5,2)'],
+  ]},
+  { id: 'gastos', titulo: 'gastos', subtitulo: 'Comprobantes', clase: 'dominio', x: 1340, y: 640, filas: [
+    ['PK', 'id', 'UUID'],
+    ['FK', 'cliente_id', 'UUID'],
+    ['FK', 'asesoria_id', 'UUID'],
+    ['FK', 'categoria_id', 'UUID'],
+    ['FK', 'cuenta_pgc_id', 'UUID'],
+    ['FK', 'exportacion_id', 'UUID · NULL'],
+    ['', 'tipo_documento', 'ENUM'],
+    ['', 'fecha_emision', 'DATE'],
+    ['', 'hora_emision', 'TIME'],
+    ['', 'nif_emisor', 'VARCHAR(9)'],
+    ['', 'razon_social_emisor', 'VARCHAR(150)'],
+    ['', 'nif_receptor', 'VARCHAR(9) · NULL'],
+    ['', 'base_imponible', 'NUMERIC(12,2)'],
+    ['', 'tipo_iva', 'NUMERIC(4,2)'],
+    ['', 'cuota_iva', 'NUMERIC(12,2)'],
+    ['', 'total', 'NUMERIC(12,2)'],
+    ['', 'estado_semaforo', 'ENUM(VERDE, AMARILLO, ROJO)'],
+    ['', 'estado', 'ENUM (DFE)'],
+    ['', 'motivo_riesgo', 'TEXT'],
+    ['', 'url_documento', 'TEXT'],
+    ['', 'hash_sha256', 'CHAR(64)'],
+    ['', 'enviado_en', 'TIMESTAMPTZ'],
+    ['', 'created_at', 'TIMESTAMPTZ'],
+  ]},
+  { id: 'justificaciones', titulo: 'justificaciones_fiscales', subtitulo: 'Asesor Fiscal Virtual', clase: 'dominio', x: 1980, y: 1040, filas: [
+    ['PK', 'id', 'UUID'],
+    ['FK', 'gasto_id', 'UUID · UQ'],
+    ['', 'pregunta_asesor', 'TEXT'],
+    ['', 'motivo_profesional', 'TEXT'],
+    ['', 'nombre_cliente_reunion', 'VARCHAR(150)'],
+    ['', 'nif_cliente_reunion', 'VARCHAR(9)'],
+    ['', 'fecha_registro', 'TIMESTAMPTZ'],
+  ]},
+  { id: 'revisiones', titulo: 'revisiones_gestor', subtitulo: 'Aprobar o rechazar (RF-09)', clase: 'dominio', x: 700, y: 760, filas: [
+    ['PK', 'id', 'UUID'],
+    ['FK', 'gasto_id', 'UUID'],
+    ['FK', 'gestor_id', 'UUID'],
+    ['', 'decision', 'ENUM(APROBADO, RECHAZADO)'],
+    ['', 'comentario', 'TEXT'],
+    ['', 'fecha', 'TIMESTAMPTZ'],
+  ]},
+  { id: 'exportaciones', titulo: 'exportaciones_contables', subtitulo: 'Lotes para el ERP', clase: 'dominio', x: 60, y: 760, filas: [
+    ['PK', 'id', 'UUID'],
+    ['FK', 'asesoria_id', 'UUID'],
+    ['FK', 'gestor_id', 'UUID'],
+    ['FK', 'cliente_id', 'UUID · NULL'],
+    ['', 'trimestre', 'SMALLINT (1-4)'],
+    ['', 'anio', 'SMALLINT'],
+    ['', 'formato', 'ENUM(CSV, JSON, A3, SAGE)'],
+    ['', 'num_asientos', 'INTEGER'],
+    ['', 'total_importe', 'NUMERIC(14,2)'],
+    ['', 'url_descarga', 'TEXT'],
+    ['', 'created_at', 'TIMESTAMPTZ'],
+  ]},
+];
+
+/*
+ * Relaciones: [tabla.columna FK, tabla.columna PK, cardinalidad, opciones].
+ * `carril` fuerza el tramo horizontal a una altura o el vertical a una x concreta
+ * para que la línea pase por los huecos entre tablas.
+ */
+const RELACIONES = [
+  // Tenant: todo cuelga de la asesoría.
+  ['usuarios.asesoria_id', 'asesorias.id', '1:N', { salidaX: 640 }],
+  ['clientes.asesoria_id', 'asesorias.id', '1:N', { ladoDestino: 'der', salidaX: 1268, carrilY: 146, entradaX: 612 }],
+  ['exportaciones.asesoria_id', 'asesorias.id', '1:N', { ladoOrigen: 'izq', ladoDestino: 'izq', salidaX: 30 }],
+  ['gastos.asesoria_id', 'asesorias.id', '1:N', { ladoOrigen: 'izq', ladoDestino: 'izq', salidaX: 1300, carrilY: 700, entradaX: 44 }],
+  // Usuarios: cuenta del autónomo y gestor asignado.
+  ['clientes.usuario_id', 'usuarios.id', '1:1', { salidaX: 1236 }],
+  ['clientes.gestor_id', 'usuarios.id', '1:N', { opcional: true, salidaX: 1252 }],
+  ['revisiones.gestor_id', 'usuarios.id', '1:N', { ladoOrigen: 'izq', ladoDestino: 'izq', salidaX: 672 }],
+  ['exportaciones.gestor_id', 'usuarios.id', '1:N', { ladoDestino: 'izq', salidaX: 632 }],
+  // Comprobantes.
+  ['gastos.cliente_id', 'clientes.id', '1:N', { ladoOrigen: 'izq', ladoDestino: 'izq', salidaX: 1316 }],
+  ['revisiones.gasto_id', 'gastos.id', '1:N', { ladoDestino: 'izq', salidaX: 1284 }],
+  ['gastos.exportacion_id', 'exportaciones.id', '1:N', { opcional: true, ladoOrigen: 'izq', ladoDestino: 'der', salidaX: 1324, carrilY: 1590, entradaX: 652 }],
+  ['exportaciones.cliente_id', 'clientes.id', '1:N', { opcional: true, ladoDestino: 'izq', salidaX: 612, carrilY: 1612, entradaX: 1308 }],
+  // Catálogo fiscal y Asesor Fiscal Virtual.
+  ['categorias.cuenta_pgc_defecto_id', 'cuentas.id', '1:N', { ladoOrigen: 'izq', ladoDestino: 'izq', salidaX: 1950 }],
+  ['gastos.categoria_id', 'categorias.id', '1:N', { salidaX: 1900 }],
+  ['gastos.cuenta_pgc_id', 'cuentas.id', '1:N', { ladoDestino: 'der', salidaX: 1880, carrilY: 930, entradaX: 2530 }],
+  ['justificaciones.gasto_id', 'gastos.id', '1:1', { ladoOrigen: 'izq', ladoDestino: 'der', salidaX: 1922 }],
+];
+
+const contenedor = document.getElementById('tablas');
+for (const t of TABLAS) {
+  const div = document.createElement('div');
+  div.className = `tabla ${t.clase ?? ''}`;
+  div.id = `tabla-${t.id}`;
+  div.style.left = `${t.x}px`;
+  div.style.top = `${t.y}px`;
+  div.innerHTML = `<header><b>${t.titulo}</b><span>${t.subtitulo}</span></header>` +
+    t.filas.map(([clave, nombre, tipo]) => `
+      <div class="fila ${clave === 'PK' ? 'es-pk' : clave === 'FK' ? 'es-fk' : ''}" data-col="${t.id}.${nombre}">
+        <span class="clave ${clave.toLowerCase()}">${clave}</span>
+        <span class="nombre">${nombre}</span>
+        <span class="tipo">${tipo}</span>
+      </div>`).join('');
+  contenedor.appendChild(div);
+}
+
+const svg = document.getElementById('lineas');
+const lienzo = document.getElementById('lienzo').getBoundingClientRect();
+const NS = 'http://www.w3.org/2000/svg';
+
+function punto(ref, lado) {
+  const fila = document.querySelector(`[data-col="${ref}"]`).getBoundingClientRect();
+  return { x: (lado === 'izq' ? fila.left : fila.right) - lienzo.left, y: fila.top + fila.height / 2 - lienzo.top };
+}
+
+function trazo(d, opcional) {
+  const p = document.createElementNS(NS, 'path');
+  p.setAttribute('d', d);
+  p.setAttribute('fill', 'none');
+  p.setAttribute('stroke', '#52525B');
+  p.setAttribute('stroke-width', '2');
+  p.setAttribute('stroke-linejoin', 'round');
+  if (opcional) p.setAttribute('stroke-dasharray', '7 6');
+  svg.appendChild(p);
+}
+
+/** Marca "muchos" (pata de gallo) o "uno" (barra) en el extremo, orientada hacia la tabla. */
+function marca(x, y, haciaDerecha, muchos) {
+  const s = haciaDerecha ? 1 : -1;
+  if (muchos) {
+    trazo(`M ${x - 16 * s} ${y} L ${x} ${y - 8} M ${x - 16 * s} ${y} L ${x} ${y + 8}`);
+  } else {
+    trazo(`M ${x - 10 * s} ${y - 8} L ${x - 10 * s} ${y + 8}`);
+  }
+}
+
+for (const [origen, destino, cardinalidad, op = {}] of RELACIONES) {
+  const tO = TABLAS.find((t) => t.id === origen.split('.')[0]);
+  const tD = TABLAS.find((t) => t.id === destino.split('.')[0]);
+  const ladoO = op.ladoOrigen ?? (tD.x < tO.x ? 'izq' : 'der');
+  const ladoD = op.ladoDestino ?? (tD.x < tO.x ? 'der' : 'izq');
+  const a = punto(origen, ladoO);
+  const b = punto(destino, ladoD);
+  const sx = op.salidaX ?? a.x + (ladoO === 'izq' ? -28 : 28);
+  const ex = op.entradaX ?? b.x + (ladoD === 'izq' ? -28 : 28);
+
+  let d;
+  if (op.carrilY !== undefined) {
+    d = `M ${a.x} ${a.y} H ${sx} V ${op.carrilY} H ${ex} V ${b.y} H ${b.x}`;
+  } else if (op.carrilX !== undefined) {
+    d = `M ${a.x} ${a.y} H ${op.carrilX} V ${b.y} H ${b.x}`;
+  } else if (op.salidaX !== undefined) {
+    d = `M ${a.x} ${a.y} H ${sx} V ${b.y} H ${b.x}`;
+  } else {
+    const mx = (a.x + b.x) / 2;
+    d = `M ${a.x} ${a.y} H ${mx} V ${b.y} H ${b.x}`;
+  }
+  trazo(d, op.opcional);
+
+  // Extremo de la FK: "muchos" (1:N) o "uno" (1:1). Extremo de la PK: siempre "uno".
+  marca(a.x, a.y, ladoO === 'izq', cardinalidad === '1:N');
+  marca(b.x, b.y, ladoD === 'izq', false);
+}
+</script>
+</body>
+</html>
