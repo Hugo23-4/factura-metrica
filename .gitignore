@@ -3,3 +3,9 @@ Thumbs.db
 node_modules/
 .env
 .env.local
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/

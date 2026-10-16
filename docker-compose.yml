@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: facturametrica-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - PROJECT_NAME=FacturaMétrica API
+      - DATABASE_URL=postgresql://factura_user:factura_pass@db:5432/facturametrica
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    container_name: facturametrica-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: factura_user
+      POSTGRES_PASSWORD: factura_pass
+      POSTGRES_DB: facturametrica
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
