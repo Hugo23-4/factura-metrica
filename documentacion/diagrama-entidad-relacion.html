@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Diagrama entidad-relación FacturaMétrica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #F4F4F5; font-family: 'Inter', sans-serif; }
+  #lienzo { position: relative; width: 3800px; height: 2260px; background: #F4F4F5; }
+  svg { position: absolute; inset: 0; }
+</style>
+</head>
+<body>
+<div id="lienzo"><svg id="er" width="3800" height="2260" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<script>
+(async () => {
+// Se espera a la tipografía para medir bien el ancho de los textos.
+await Promise.all(['500 17px Inter', '600 16px Inter', '700 16px Inter'].map((f) => document.fonts.load(f)));
+/*
+ * Diagrama entidad-relación conceptual (notación de Chen con cardinalidades mínima y máxima).
+ * Las claves foráneas no aparecen como atributos: en el modelo conceptual las representan
+ * las relaciones. Al pasar al modelo relacional se convierten en columnas FK.
+ */
+
+const ENTIDADES = [
+  { id: 'asesoria', nombre: 'ASESORIA', x: 520, y: 640, dir: 'arriba', ancho: 880, atributos: ['id', 'cif', 'razon_social', 'email_contacto', 'telefono', 'codigo_invitacion', 'plan_suscripcion', 'activo', 'created_at'] },
+  { id: 'usuario', nombre: 'USUARIO', x: 1450, y: 640, dir: 'arriba', ancho: 820, atributos: ['id', 'email', 'password_hash', 'rol', 'nombre', 'apellidos', 'activo', 'created_at'] },
+  { id: 'cliente', nombre: 'CLIENTE_AUTONOMO', x: 2380, y: 640, dir: 'arriba', ancho: 880, atributos: ['id', 'nif', 'nombre_fiscal', 'actividad_iae', 'telefono', 'domicilio_fiscal', 'recordatorios', 'fecha_alta'] },
+  { id: 'cuenta', nombre: 'CUENTA_PGC', x: 3250, y: 640, dir: 'arriba', ancho: 700, atributos: ['id', 'codigo', 'descripcion', 'tipo_cuenta', 'cuenta_asociada_iva'] },
+  { id: 'categoria', nombre: 'CATEGORIA_GASTO', x: 3250, y: 1080, dir: 'derecha', atributos: ['id', 'nombre', 'descripcion', 'requiere_justificacion_finde', 'es_manutencion', 'no_afecto', 'deducible_irpf_pct', 'deducible_iva_pct'] },
+  { id: 'exportacion', nombre: 'EXPORTACION_CONTABLE', x: 520, y: 1560, dir: 'abajo', ancho: 860, atributos: ['id', 'trimestre', 'anio', 'formato', 'num_asientos', 'total_importe', 'url_descarga', 'created_at'] },
+  { id: 'revision', nombre: 'REVISION_GESTOR', x: 1450, y: 1560, dir: 'abajo', ancho: 700, atributos: ['id', 'decision', 'comentario', 'fecha'] },
+  { id: 'gasto', nombre: 'GASTO', x: 2380, y: 1560, dir: 'abajo', ancho: 1020, atributos: ['id', 'tipo_documento', 'fecha_emision', 'hora_emision', 'nif_emisor', 'razon_social_emisor', 'nif_receptor', 'base_imponible', 'tipo_iva', 'cuota_iva', 'total', 'estado_semaforo', 'estado', 'motivo_riesgo', 'url_documento', 'hash_sha256', 'enviado_en', 'created_at'] },
+  { id: 'justificacion', nombre: 'JUSTIFICACION_FISCAL', x: 3250, y: 1560, dir: 'abajo', ancho: 700, atributos: ['id', 'pregunta_asesor', 'motivo_profesional', 'nombre_cliente_reunion', 'nif_cliente_reunion', 'fecha_registro'] },
+];
+
+/** [nombre, x, y, entidad A, cardinalidad A, entidad B, cardinalidad B, tipo]. */
+const RELACIONES = [
+  ['tiene', 985, 640, 'asesoria', '(1,1)', 'usuario', '(1,N)', '1:N'],
+  ['pertenece a', 1900, 905, 'cliente', '(0,N)', 'asesoria', '(1,1)', 'N:1'],
+  ['es', 1915, 585, 'usuario', '(1,1)', 'cliente', '(0,1)', '1:1'],
+  ['asesora', 1915, 735, 'usuario', '(0,1)', 'cliente', '(0,N)', '1:N'],
+  ['registra', 2380, 1100, 'cliente', '(1,1)', 'gasto', '(0,N)', '1:N'],
+  ['genera', 520, 1100, 'asesoria', '(1,1)', 'exportacion', '(0,N)', '1:N'],
+  ['realiza', 985, 1100, 'usuario', '(1,1)', 'exportacion', '(0,N)', '1:N'],
+  ['emite', 1450, 1100, 'usuario', '(1,1)', 'revision', '(0,N)', '1:N'],
+  ['recibe', 1915, 1560, 'gasto', '(1,1)', 'revision', '(0,N)', '1:N'],
+  ['incluye', 1700, 1370, 'exportacion', '(0,1)', 'gasto', '(1,N)', '1:N'],
+  ['se clasifica en', 2815, 1330, 'gasto', '(0,N)', 'categoria', '(1,1)', 'N:1'],
+  ['se imputa a', 2815, 960, 'gasto', '(0,N)', 'cuenta', '(1,1)', 'N:1'],
+  ['propone', 3250, 860, 'categoria', '(0,N)', 'cuenta', '(1,1)', 'N:1'],
+  ['se justifica con', 2815, 1560, 'gasto', '(1,1)', 'justificacion', '(0,1)', '1:1'],
+];
+
+const NS = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('er');
+const capas = { lineas: grupo(), formas: grupo(), textos: grupo() };
+const medidor = document.createElement('canvas').getContext('2d');
+const FUENTE = '500 17px Inter';
+const TINTA = '#18181B';
+const GRIS = '#71717A';
+
+function grupo() { const g = document.createElementNS(NS, 'g'); svg.appendChild(g); return g; }
+function el(capa, tipo, attrs, texto) {
+  const e = document.createElementNS(NS, tipo);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  if (texto !== undefined) e.textContent = texto;
+  capas[capa].appendChild(e);
+  return e;
+}
+function ancho(texto, fuente = FUENTE) { medidor.font = fuente; return medidor.measureText(texto).width; }
+const linea = (a, b, extra = {}) => el('lineas', 'line', { x1: a.x, y1: a.y, x2: b.x, y2: b.y, stroke: '#52525B', 'stroke-width': 1.6, ...extra });
+
+// Título y leyenda.
+el('textos', 'text', { x: 60, y: 92, 'font-size': 44, 'font-weight': 700, fill: TINTA, 'letter-spacing': -1 }, 'Diagrama entidad-relación · FacturaMétrica');
+el('textos', 'text', { x: 60, y: 134, 'font-size': 21, fill: GRIS }, 'Modelo conceptual · Notación de Chen con cardinalidades (mínima, máxima)');
+
+const ENT_W = 270, ENT_H = 72;
+const centros = {};
+
+for (const e of ENTIDADES) {
+  centros[e.id] = { x: e.x, y: e.y };
+  // Colocación de atributos en filas (arriba/abajo) o en columna (derecha).
+  const ovalos = e.atributos.map((nombre) => ({ nombre, rx: ancho(nombre) / 2 + 22, ry: 25 }));
+  const posiciones = [];
+  if (e.dir === 'derecha') {
+    const xCol = e.x + 330;
+    const alto = (ovalos.length - 1) * 62;
+    ovalos.forEach((o, i) => posiciones.push({ x: xCol + o.rx - 110, y: e.y - alto / 2 + i * 62 }));
+  } else {
+    const filas = [[]];
+    let usado = 0;
+    for (const o of ovalos) {
+      const w = o.rx * 2 + 18;
+      if (usado + w > e.ancho && filas[filas.length - 1].length) { filas.push([]); usado = 0; }
+      filas[filas.length - 1].push(o);
+      usado += w;
+    }
+    const signo = e.dir === 'arriba' ? -1 : 1;
+    filas.forEach((fila, f) => {
+      const total = fila.reduce((s, o) => s + o.rx * 2 + 18, -18);
+      let x = e.x - total / 2;
+      // Las filas se escalonan para que las líneas no tapen los óvalos de la fila siguiente.
+      const y = e.y + signo * (135 + f * 88);
+      for (const o of fila) {
+        posiciones.push({ x: x + o.rx, y });
+        x += o.rx * 2 + 18;
+      }
+    });
+  }
+  ovalos.forEach((o, i) => {
+    const p = posiciones[i];
+    linea(p, { x: e.x, y: e.y }, { stroke: '#A1A1AA', 'stroke-width': 1.3 });
+    el('formas', 'ellipse', { cx: p.x, cy: p.y, rx: o.rx, ry: o.ry, fill: '#fff', stroke: '#52525B', 'stroke-width': 1.5 });
+    const esClave = o.nombre === 'id';
+    el('textos', 'text', {
+      x: p.x, y: p.y + 6, 'text-anchor': 'middle', 'font-size': 17,
+      'font-weight': esClave ? 700 : 500, fill: TINTA, 'text-decoration': esClave ? 'underline' : 'none',
+    }, o.nombre);
+  });
+  el('formas', 'rect', { x: e.x - ENT_W / 2, y: e.y - ENT_H / 2, width: ENT_W, height: ENT_H, fill: TINTA, rx: 4 });
+  el('textos', 'text', { x: e.x, y: e.y + 7, 'text-anchor': 'middle', 'font-size': e.nombre.length > 18 ? 18 : 21, 'font-weight': 700, fill: '#fff' }, e.nombre);
+}
+
+const DW = 92, DH = 54;
+for (const [nombre, x, y, a, ca, b, cb, tipo] of RELACIONES) {
+  const centro = { x, y };
+  const w = Math.max(DW, ancho(nombre, '600 16px Inter') / 2 + 44);
+  for (const [ent, card] of [[a, ca], [b, cb]]) {
+    const c = centros[ent];
+    linea(c, centro, { stroke: TINTA, 'stroke-width': 2 });
+    // Cardinalidad junto a la entidad, a lo largo de la línea.
+    const dx = centro.x - c.x, dy = centro.y - c.y;
+    const d = Math.hypot(dx, dy);
+    const ux = dx / d, uy = dy / d;
+    const salida = Math.abs(ux) * (ENT_W / 2) > Math.abs(uy) * (ENT_H / 2)
+      ? (ENT_W / 2) / Math.abs(ux) : (ENT_H / 2) / Math.abs(uy);
+    const px = c.x + ux * (salida + 34) - uy * 18;
+    const py = c.y + uy * (salida + 34) + ux * 18;
+    const wt = ancho(card, '700 16px Inter') + 12;
+    el('formas', 'rect', { x: px - wt / 2, y: py - 13, width: wt, height: 24, rx: 5, fill: '#F4F4F5' });
+    el('textos', 'text', { x: px, y: py + 5, 'text-anchor': 'middle', 'font-size': 16, 'font-weight': 700, fill: '#1D4ED8' }, card);
+  }
+  el('formas', 'polygon', { points: `${x},${y - DH} ${x + w},${y} ${x},${y + DH} ${x - w},${y}`, fill: '#fff', stroke: TINTA, 'stroke-width': 2 });
+  el('textos', 'text', { x, y: y - 3, 'text-anchor': 'middle', 'font-size': 16, 'font-weight': 600, fill: TINTA }, nombre);
+  el('textos', 'text', { x, y: y + 17, 'text-anchor': 'middle', 'font-size': 14, fill: GRIS }, tipo);
+}
+
+// Leyenda.
+const ly = 2215;
+el('formas', 'rect', { x: 60, y: ly - 22, width: 90, height: 36, rx: 4, fill: TINTA });
+el('textos', 'text', { x: 162, y: ly + 3, 'font-size': 18, fill: GRIS }, 'Entidad');
+el('formas', 'polygon', { points: `290,${ly - 22} 336,${ly - 4} 290,${ly + 14} 244,${ly - 4}`, fill: '#fff', stroke: TINTA, 'stroke-width': 2 });
+el('textos', 'text', { x: 350, y: ly + 3, 'font-size': 18, fill: GRIS }, 'Relación');
+el('formas', 'ellipse', { cx: 520, cy: ly - 4, rx: 50, ry: 20, fill: '#fff', stroke: '#52525B', 'stroke-width': 1.5 });
+el('textos', 'text', { x: 584, y: ly + 3, 'font-size': 18, fill: GRIS }, 'Atributo');
+el('formas', 'ellipse', { cx: 740, cy: ly - 4, rx: 36, ry: 20, fill: '#fff', stroke: '#52525B', 'stroke-width': 1.5 });
+el('textos', 'text', { x: 740, y: ly + 2, 'text-anchor': 'middle', 'font-size': 16, 'font-weight': 700, 'text-decoration': 'underline', fill: TINTA }, 'id');
+el('textos', 'text', { x: 790, y: ly + 3, 'font-size': 18, fill: GRIS }, 'Clave primaria (subrayada)');
+el('textos', 'text', { x: 1080, y: ly + 3, 'font-size': 18, 'font-weight': 700, fill: '#1D4ED8' }, '(mín, máx)');
+el('textos', 'text', { x: 1180, y: ly + 3, 'font-size': 18, fill: GRIS }, 'Cardinalidad de la entidad en la relación');
+el('textos', 'text', { x: 3740, y: ly + 3, 'text-anchor': 'end', 'font-size': 17, fill: GRIS }, 'Las claves foráneas se derivan de las relaciones al pasar al modelo relacional (ver diagrama relacional).');
+document.body.dataset.listo = 'si';
+})();
+</script>
+</body>
+</html>
