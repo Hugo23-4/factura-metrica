@@ -52,33 +52,32 @@
   /* Carriles (Swimlanes) */
   .carril { position: absolute; left: 80px; width: 3240px; border-radius: 16px; border: 1.5px solid var(--borde); background: var(--fondo); z-index: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
   .carril-etiqueta { position: absolute; left: 24px; top: 22px; display: flex; align-items: center; gap: 12px; }
-  .carril-icono { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; color: #fff; }
+  .carril-badge { width: 36px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; color: #fff; font-family: 'JetBrains Mono', monospace; }
   .carril-titulo { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--texto); }
   .carril-desc { font-size: 13.5px; color: var(--texto-mut); font-weight: 500; margin-left: 8px; }
   
   /* Nodos y formas */
-  .nodo { position: absolute; z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.04); transition: transform 0.2s ease; }
+  .nodo { position: absolute; z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
   
   /* Tipos de nodos */
   .nodo.terminal {
     width: 220px; height: 72px; border-radius: 40px;
     background: #18181B; color: #FFFFFF; border: 2px solid #27272A;
   }
-  .nodo.terminal .t-tit { font-size: 15px; font-weight: 700; }
+  .nodo.terminal .t-tit { font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
   .nodo.terminal .t-sub { font-size: 12px; color: #A1A1AA; }
   
   .nodo.proceso {
     background: #FFFFFF; border: 1.5px solid var(--borde-dark); border-radius: 12px;
-    padding: 14px 18px; width: 250px; min-height: 96px;
+    padding: 16px 20px; width: 250px; min-height: 96px;
   }
   .nodo.proceso.azul { border-color: var(--azul-borde); border-left-width: 6px; }
   .nodo.proceso.morado { border-color: var(--morado-borde); border-left-width: 6px; }
   .nodo.proceso.verde { border-color: var(--verde-borde); border-left-width: 6px; }
   
-  .nodo .n-icono { font-size: 18px; margin-bottom: 4px; }
-  .nodo .n-titulo { font-size: 14.5px; font-weight: 700; color: var(--texto); line-height: 1.25; }
-  .nodo .n-desc { font-size: 12px; color: var(--texto-mut); margin-top: 5px; line-height: 1.3; }
-  .nodo .n-tag { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 4px; margin-top: 6px; }
+  .nodo .n-titulo { font-size: 15px; font-weight: 700; color: var(--texto); line-height: 1.25; }
+  .nodo .n-desc { font-size: 12px; color: var(--texto-mut); margin-top: 6px; line-height: 1.35; }
+  .nodo .n-tag { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 4px; margin-top: 8px; }
   
   /* Rombos de decisión */
   .rombo-wrap { position: absolute; z-index: 5; width: 220px; height: 160px; display: flex; align-items: center; justify-content: center; }
@@ -88,13 +87,13 @@
   
   /* Badges semáforo */
   .nodo.semaforo {
-    width: 260px; min-height: 106px; border-radius: 12px; padding: 14px 18px;
+    width: 260px; min-height: 106px; border-radius: 12px; padding: 16px 20px;
   }
   .nodo.semaforo.verde { background: var(--verde-bg); border: 2px solid var(--verde-borde); color: var(--verde-texto); }
   .nodo.semaforo.amarillo { background: var(--amarillo-bg); border: 2px solid var(--amarillo-borde); color: var(--amarillo-texto); }
   .nodo.semaforo.rojo { background: var(--rojo-bg); border: 2px solid var(--rojo-borde); color: var(--rojo-texto); }
-  .nodo.semaforo .s-titulo { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; justify-content: center; }
-  .nodo.semaforo .s-desc { font-size: 12px; margin-top: 5px; line-height: 1.35; font-weight: 500; color: #27272A; }
+  .nodo.semaforo .s-titulo { font-size: 15px; font-weight: 700; text-align: center; }
+  .nodo.semaforo .s-desc { font-size: 12px; margin-top: 6px; line-height: 1.35; font-weight: 500; color: #27272A; }
   
   /* Etiquetas sobre líneas */
   .etiqueta-linea {
@@ -134,7 +133,7 @@
   <!-- Carril 1: AUTÓNOMO / APP MÓVIL -->
   <div class="carril" style="top: 130px; height: 490px;">
     <div class="carril-etiqueta">
-      <div class="carril-icono" style="background:#2563EB;">📱</div>
+      <div class="carril-badge" style="background:#2563EB;">01</div>
       <span class="carril-titulo">Carril 1 · Autónomo · App Móvil (React Native PWA)</span>
       <span class="carril-desc">Captura fotográfica de tickets, ingesta de PDF y micro-interacción con el Asesor Fiscal Virtual</span>
     </div>
@@ -143,7 +142,7 @@
   <!-- Carril 2: MOTOR FISCAL Y BACKEND -->
   <div class="carril" style="top: 640px; height: 1030px; background:#FAFAFA;">
     <div class="carril-etiqueta">
-      <div class="carril-icono" style="background:#7C3AED;">⚙️</div>
+      <div class="carril-badge" style="background:#7C3AED;">02</div>
       <span class="carril-titulo">Carril 2 · Backend Core & Motor de Reglas Fiscales (FastAPI / Workers)</span>
       <span class="carril-desc">Extracción OCR con visión artificial, árbol de decisiones de deducibilidad LIRPF y clasificación semafórica preventiva</span>
     </div>
@@ -152,7 +151,7 @@
   <!-- Carril 3: ASESORÍA CONTABLE / PANEL WEB & ERP -->
   <div class="carril" style="top: 1690px; height: 530px;">
     <div class="carril-etiqueta">
-      <div class="carril-icono" style="background:#059669;">💼</div>
+      <div class="carril-badge" style="background:#059669;">03</div>
       <span class="carril-titulo">Carril 3 · Asesoría Contable · Panel Web & Conector ERP</span>
       <span class="carril-desc">Bandeja semafórica de revisión, ratificación de subcuentas PGC, cierre trimestral y exportación oficial</span>
     </div>
@@ -179,7 +178,7 @@
 </div>
 
 <script>
-// Definición formal de nodos del diagrama de flujo
+// Definición formal de nodos del diagrama de flujo (sin emoticonos)
 const NODOS = [
   // ==================== CARRIL 1: AUTÓNOMO ====================
   {
@@ -194,9 +193,8 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'azul',
     x: 420, y: 206,
-    icono: '📸',
     titulo: 'Captura o subida de archivo',
-    desc: 'Foto con cámara del smartphone o subida de factura PDF',
+    desc: 'Fotografía con cámara de smartphone o subida de factura PDF',
     tag: 'Estado: CREADO / SUBIDO',
     tagBg: '#EFF6FF', tagColor: '#1D4ED8'
   },
@@ -205,7 +203,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'azul',
     x: 740, y: 206,
-    icono: '🔒',
     titulo: 'Preprocesado y Hash SHA-256',
     desc: 'Compresión en cliente, cálculo de huella digital y envío seguro',
     tag: 'Evita duplicidad física',
@@ -216,8 +213,7 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'morado',
     x: 1850, y: 240,
-    icono: '💬',
-    titulo: "Intervención 'Asesor Fiscal Virtual'",
+    titulo: "Intervención Asesor Fiscal Virtual",
     desc: 'Micro-diálogo interactivo en app solicitando justificación contextual',
     tag: 'RF-05 / LIRPF Art. 30',
     tagBg: '#F5F3FF', tagColor: '#6D28D9'
@@ -234,7 +230,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'verde',
     x: 2500, y: 240,
-    icono: '📝',
     titulo: 'Aporte de Justificación',
     desc: 'Se registra nombre/NIF del tercero reunido y motivo profesional',
     tag: 'Estado: AMARILLO_JUSTIFICADO',
@@ -244,7 +239,6 @@ const NODOS = [
     id: 'n_bloqueado',
     tipo: 'proceso',
     x: 2175, y: 440,
-    icono: '⏳',
     titulo: 'Deducción en Suspenso',
     desc: 'El gasto permanece bloqueado y fuera de las liquidaciones trimestrales',
     tag: 'Estado: PENDIENTE_JUSTIF.',
@@ -257,7 +251,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'morado',
     x: 740, y: 730,
-    icono: '👁️',
     titulo: 'Extracción OCR & NER',
     desc: 'Extracción de NIF emisor, fecha, hora, bases, cuotas de IVA y total',
     tag: 'Estado: EN_PROCESAMIENTO_OCR',
@@ -274,10 +267,9 @@ const NODOS = [
     id: 'n_error_ocr',
     tipo: 'proceso',
     x: 420, y: 950,
-    icono: '⚠️',
     titulo: 'Revisión manual OCR',
     desc: 'NIF ilegible o total nulo. Se solicita al autónomo corregir datos manuales',
-    tag: 'Semaforo: AMARILLO (Error lectura)',
+    tag: 'Semáforo: AMARILLO (Error lectura)',
     tagBg: '#FEF3C7', tagColor: '#B45309'
   },
   {
@@ -292,7 +284,6 @@ const NODOS = [
     tipo: 'semaforo',
     clase: 'rojo',
     x: 1070, y: 1180,
-    icono: '🔴',
     titulo: 'Semáforo ROJO · No Deducible',
     desc: 'Gasto no afecto a la actividad. Advertencia legal registrada; excluido de deducción.',
     tag: 'Estado: ROJO_NO_DEDUCIBLE'
@@ -323,7 +314,6 @@ const NODOS = [
     tipo: 'semaforo',
     clase: 'amarillo',
     x: 1610, y: 680,
-    icono: '🟡',
     titulo: 'Semáforo AMARILLO · Riesgo Fiscal',
     desc: 'Alerta de riesgo preventivo. Se requiere micro-justificación para blindar ante la AEAT.',
     tag: 'Estado: AMARILLO_PENDIENTE'
@@ -333,7 +323,6 @@ const NODOS = [
     tipo: 'semaforo',
     clase: 'verde',
     x: 2370, y: 945,
-    icono: '🟢',
     titulo: 'Semáforo VERDE · Deducible Pleno',
     desc: 'Cumple todos los preceptos legales de la LIRPF e IVA sin contingencias detectadas.',
     tag: 'Estado: VERDE_DEDUCIBLE'
@@ -343,7 +332,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'verde',
     x: 2700, y: 948,
-    icono: '🏷️',
     titulo: 'Imputación de Subcuenta PGC',
     desc: 'Asignación automática a cuentas 629 (Otros servicios), 628 (Suministros), etc.',
     tag: 'Plan General Contable',
@@ -354,7 +342,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'morado',
     x: 3010, y: 948,
-    icono: '💾',
     titulo: 'Persistencia en PostgreSQL',
     desc: 'Registro en base de datos multi-tenant y disponibilidad en panel de despacho',
     tag: 'ACID / Auditoría completa',
@@ -367,7 +354,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'morado',
     x: 2500, y: 1780,
-    icono: '📥',
     titulo: 'Bandeja Semafórica Asesoría',
     desc: 'Supervisión centralizada por autónomo: gastos Verdes, Amarillos justificados y Rojos',
     tag: 'Panel Web Gestoría',
@@ -384,7 +370,6 @@ const NODOS = [
     id: 'n_rechazo_gestor',
     tipo: 'proceso',
     x: 2175, y: 1980,
-    icono: '🚫',
     titulo: 'Ajuste / Exclusión contable',
     desc: 'El gestor reclasifica el gasto como no deducible o solicita factura rectificativa',
     tag: 'Decisión: RECHAZADO',
@@ -395,7 +380,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'verde',
     x: 1840, y: 1775,
-    icono: '✅',
     titulo: 'Aprobación y Certificación',
     desc: 'Ratificación del gasto, IVA deducible soportado y subcuenta PGC asignada',
     tag: 'Estado: APROBADO_GESTOR',
@@ -406,7 +390,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'verde',
     x: 1470, y: 1775,
-    icono: '⚖️',
     titulo: 'Generación de Asiento Contable',
     desc: 'Debe: (62x) Gasto + (472) IVA soportado | Haber: (410) Acreedores / (572) Banco',
     tag: 'Asiento balanceado en doble partida',
@@ -417,7 +400,6 @@ const NODOS = [
     tipo: 'proceso',
     clase: 'verde',
     x: 1090, y: 1775,
-    icono: '📦',
     titulo: 'Cierre Trimestral & Exportación',
     desc: 'Ficheros estructurados normalizados para ERP (A3ASESOR, Contasol, SAGE, CSV)',
     tag: 'Estado: EXPORTADO_CONTABILIZADO',
@@ -469,7 +451,7 @@ NODOS.forEach((n) => {
     el.style.left = `${n.x}px`;
     el.style.top = `${n.y}px`;
     el.innerHTML = `
-      <div class="s-titulo">${n.icono} ${n.titulo}</div>
+      <div class="s-titulo">${n.titulo}</div>
       <div class="s-desc">${n.desc}</div>
       <div class="n-tag" style="background:rgba(0,0,0,0.06); font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; margin-top:8px; display:inline-block; padding:2px 8px; border-radius:4px;">${n.tag}</div>
     `;
@@ -480,7 +462,6 @@ NODOS.forEach((n) => {
     el.style.left = `${n.x}px`;
     el.style.top = `${n.y}px`;
     el.innerHTML = `
-      <div class="n-icono">${n.icono}</div>
       <div class="n-titulo">${n.titulo}</div>
       <div class="n-desc">${n.desc}</div>
       ${n.tag ? `<div class="n-tag" style="background:${n.tagBg}; color:${n.tagColor};">${n.tag}</div>` : ''}
