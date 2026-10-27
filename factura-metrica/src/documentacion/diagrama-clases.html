@@ -68,17 +68,17 @@ const p = (s) => `<span class="privado">${s}</span>`;
 const CLASES = [
   // ---------------- Modelo de dominio ----------------
   { id: 'asesoria', nombre: 'Asesoria', x: 60, y: 180, w: 430, atributos: [
-    `+ id: ${t('string')}`, `+ codigoInvitacion: ${t('string')}`, `+ cif: ${t('string')}`,
+    `+ id: ${t('string')} <b>{id}</b>`, `+ codigoInvitacion: ${t('string')}`, `+ cif: ${t('string')}`,
     `+ razonSocial: ${t('string')}`, `+ emailContacto: ${t('string')}`, `+ telefono: ${t('string')}`,
     `+ plan: ${t("'basico' | 'profesional'")}`] },
   { id: 'usuario', nombre: 'Usuario', x: 580, y: 180, w: 450, atributos: [
-    `+ id: ${t('string')}`, `+ rol: ${t('Rol')}`, `+ asesoriaId: ${t('string')}`, `+ nombre: ${t('string')}`,
+    `+ id: ${t('string')} <b>{id}</b>`, `+ rol: ${t('Rol')}`, `+ asesoriaId: ${t('string')}`, `+ nombre: ${t('string')}`,
     `+ email: ${t('string')}`, p(`− passwordHash: string`), `+ activo: ${t('boolean')}`,
     `+ creadoEn: ${t('string')}`, `+ nif: ${t('string')}`, `+ actividad: ${t('string')}`,
     `+ telefono?: ${t('string')}`, `+ domicilioFiscal?: ${t('string')}`, `+ gestorId?: ${t('string')}`,
     `+ recordatorios: ${t('boolean')}`] },
   { id: 'gasto', nombre: 'Gasto', x: 1110, y: 180, w: 500, atributos: [
-    `+ id: ${t('string')}`, `+ clienteId: ${t('string')}`, `+ asesoriaId: ${t('string')}`,
+    `+ id: ${t('string')} <b>{id}</b>`, `+ clienteId: ${t('string')}`, `+ asesoriaId: ${t('string')}`,
     `+ semaforo: ${t('Semaforo')}`, `+ motivoRiesgo?: ${t('string')}`, `+ preguntaAsesor?: ${t('string')}`,
     `+ cuentaPgc: ${t('string')}`, `+ justificacion?: ${t('Justificacion')}`, `+ revision?: ${t('Revision')}`,
     `+ nota?: ${t('string')}`, `+ imagenUri?: ${t('string')}`, `+ hashDocumento?: ${t('string')}`,
@@ -89,7 +89,7 @@ const CLASES = [
     `+ cuotaIva: ${t('number')}`, `+ total: ${t('number')}`, `+ categoria: ${t('Categoria')}`,
     `+ tipoDocumento: ${t('TipoDocumento')}`] },
   { id: 'exportacion', nombre: 'Exportacion', x: 60, y: 560, w: 430, atributos: [
-    `+ id: ${t('string')}`, `+ asesoriaId: ${t('string')}`, `+ gestorId: ${t('string')}`,
+    `+ id: ${t('string')} <b>{id}</b>`, `+ asesoriaId: ${t('string')}`, `+ gestorId: ${t('string')}`,
     `+ trimestre: ${t('number')}`, `+ anio: ${t('number')}`, `+ formato: ${t("'csv' | 'json'")}`,
     `+ numAsientos: ${t('number')}`, `+ totalImporte: ${t('number')}`, `+ fecha: ${t('string')}`] },
   { id: 'revision', nombre: 'Revision', x: 580, y: 760, w: 450, atributos: [
