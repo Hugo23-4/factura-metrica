@@ -49,3 +49,4 @@ def verificar_codigo_invitacion(codigo: str, db: Session = Depends(get_db)):
         codigoInvitacion=asesoria.codigo_invitacion,
         activo=asesoria.activo,
     )
+

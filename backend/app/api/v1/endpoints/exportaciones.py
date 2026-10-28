@@ -179,3 +179,4 @@ def descargar_archivo_exportacion(
         "Content-Disposition": f'attachment; filename="{nombre_archivo}"',
     }
     return Response(content=contenido, media_type=media_type, headers=headers)
+

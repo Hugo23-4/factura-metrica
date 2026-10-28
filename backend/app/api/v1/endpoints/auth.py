@@ -173,3 +173,4 @@ def perfil_actual(usuario: Usuario = Depends(obtener_usuario_actual)):
         asesoriaId=usuario.asesoria_id,
         createdAt=usuario.created_at.isoformat() if usuario.created_at else "",
     )
+

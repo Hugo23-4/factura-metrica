@@ -52,3 +52,4 @@ class ExportacionResponse(BaseModel):
 class ExportacionDetalleResponse(ExportacionResponse):
     asientos: List[AsientoExportado]
     contenido: Optional[str] = None
+
