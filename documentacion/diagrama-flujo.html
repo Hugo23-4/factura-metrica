@@ -56,45 +56,28 @@
   .carril-titulo { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--texto); }
   .carril-desc { font-size: 13.5px; color: var(--texto-mut); font-weight: 500; margin-left: 8px; }
   
-  /* Nodos y formas */
-  .nodo { position: absolute; z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.04); }
-  
-  /* Tipos de nodos */
-  .nodo.terminal {
-    width: 220px; height: 72px; border-radius: 40px;
-    background: #18181B; color: #FFFFFF; border: 2px solid #27272A;
-  }
-  .nodo.terminal .t-tit { font-size: 15px; font-weight: 700; letter-spacing: 0.5px; }
-  .nodo.terminal .t-sub { font-size: 12px; color: #A1A1AA; }
-  
-  .nodo.proceso {
-    background: #FFFFFF; border: 1.5px solid var(--borde-dark); border-radius: 12px;
-    padding: 16px 20px; width: 250px; min-height: 96px;
-  }
-  .nodo.proceso.azul { border-color: var(--azul-borde); border-left-width: 6px; }
-  .nodo.proceso.morado { border-color: var(--morado-borde); border-left-width: 6px; }
-  .nodo.proceso.verde { border-color: var(--verde-borde); border-left-width: 6px; }
-  
-  .nodo .n-titulo { font-size: 15px; font-weight: 700; color: var(--texto); line-height: 1.25; }
-  .nodo .n-desc { font-size: 12px; color: var(--texto-mut); margin-top: 6px; line-height: 1.35; }
-  .nodo .n-tag { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 600; padding: 2px 7px; border-radius: 4px; margin-top: 8px; }
-  
-  /* Rombos de decisión */
-  .rombo-wrap { position: absolute; z-index: 5; width: 220px; height: 160px; display: flex; align-items: center; justify-content: center; }
-  .rombo-svg { position: absolute; width: 100%; height: 100%; }
-  .rombo-contenido { position: relative; z-index: 6; text-align: center; width: 140px; font-size: 13px; font-weight: 700; line-height: 1.25; color: var(--texto); }
-  .rombo-sub { font-size: 10.5px; font-weight: 500; color: #4B5563; margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
-  
-  /* Badges semáforo */
-  .nodo.semaforo {
-    width: 260px; min-height: 106px; border-radius: 12px; padding: 16px 20px;
-  }
-  .nodo.semaforo.verde { background: var(--verde-bg); border: 2px solid var(--verde-borde); color: var(--verde-texto); }
-  .nodo.semaforo.amarillo { background: var(--amarillo-bg); border: 2px solid var(--amarillo-borde); color: var(--amarillo-texto); }
-  .nodo.semaforo.rojo { background: var(--rojo-bg); border: 2px solid var(--rojo-borde); color: var(--rojo-texto); }
-  .nodo.semaforo .s-titulo { font-size: 15px; font-weight: 700; text-align: center; }
-  .nodo.semaforo .s-desc { font-size: 12px; margin-top: 6px; line-height: 1.35; font-weight: 500; color: #27272A; }
-  
+  /* Nodos: cada símbolo es un SVG de fondo con el texto centrado encima */
+  .nodo { position: absolute; z-index: 5; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+  .nodo > svg.forma { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.05)); }
+  .nodo .contenido { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; }
+  .nodo .n-titulo { font-size: 14.5px; font-weight: 700; color: var(--texto); line-height: 1.25; }
+  .nodo .n-desc { font-size: 11.5px; color: var(--texto-mut); margin-top: 5px; line-height: 1.35; }
+  .nodo .n-tag { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; padding: 2px 7px; border-radius: 4px; margin-top: 7px; }
+  .nodo.terminal .n-titulo { color: #FFFFFF; letter-spacing: 0.5px; }
+  .nodo.terminal .n-desc { color: #A1A1AA; margin-top: 2px; }
+  .nodo.rombo .n-titulo { font-size: 13px; }
+  .nodo.rombo .n-desc { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: #4B5563; margin-top: 3px; }
+  .nodo.conector .n-titulo { font-size: 18px; font-family: 'JetBrains Mono', monospace; }
+  .nodo.comentario .n-desc { color: #3F3F46; font-size: 11.5px; margin-top: 0; }
+  .nodo.comentario .n-titulo { font-size: 12px; }
+
+  /* Simbología */
+  .simbologia { position: absolute; z-index: 5; background: #FFFFFF; border: 1.5px solid var(--borde); border-radius: 12px; padding: 18px 24px; }
+  .simbologia h3 { font-size: 13px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 14px; }
+  .simbologia .rejilla { display: flex; gap: 10px; }
+  .simbologia .simbolo { width: 118px; display: flex; flex-direction: column; align-items: center; gap: 10px; font-size: 11.5px; font-weight: 600; color: #3F3F46; text-align: center; line-height: 1.2; }
+  .simbologia .simbolo svg { width: 96px; height: 52px; overflow: visible; }
+
   /* Etiquetas sobre líneas */
   .etiqueta-linea {
     position: absolute; z-index: 8; font-size: 11.5px; font-weight: 700;
@@ -144,7 +127,7 @@
     <div class="carril-etiqueta">
       <div class="carril-badge" style="background:#7C3AED;">02</div>
       <span class="carril-titulo">Carril 2 · Backend Core & Motor de Reglas Fiscales (FastAPI / Workers)</span>
-      <span class="carril-desc">Extracción OCR con visión artificial, árbol de decisiones de deducibilidad LIRPF y clasificación semafórica preventiva</span>
+
     </div>
   </div>
 
@@ -178,240 +161,173 @@
 </div>
 
 <script>
-// Definición formal de nodos del diagrama de flujo (sin emoticonos)
+// Diagrama de flujo con la simbología estándar (ISO 5807): cada nodo se define por su centro (cx, cy)
+const COLORES = {
+  neutro:   { trazo: '#3F3F46', relleno: '#FFFFFF', tagBg: '#F4F4F5', tagColor: '#27272A' },
+  azul:     { trazo: '#2563EB', relleno: '#FFFFFF', tagBg: '#EFF6FF', tagColor: '#1D4ED8' },
+  morado:   { trazo: '#7C3AED', relleno: '#FFFFFF', tagBg: '#F3E8FF', tagColor: '#7E22CE' },
+  verde:    { trazo: '#16A34A', relleno: '#FFFFFF', tagBg: '#DCFCE7', tagColor: '#15803D' },
+  sVerde:   { trazo: '#16A34A', relleno: '#DCFCE7', tagBg: 'rgba(0,0,0,0.06)', tagColor: '#15803D' },
+  sAmarillo:{ trazo: '#D97706', relleno: '#FEF3C7', tagBg: 'rgba(0,0,0,0.06)', tagColor: '#B45309' },
+  sRojo:    { trazo: '#DC2626', relleno: '#FEE2E2', tagBg: 'rgba(0,0,0,0.06)', tagColor: '#B91C1C' },
+  terminal: { trazo: '#27272A', relleno: '#18181B' },
+};
+
+/** Devuelve el SVG interior de cada símbolo para un ancho w y alto h. */
+function forma(tipo, w, h, c) {
+  const t = `stroke="${c.trazo}" stroke-width="2" stroke-linejoin="round" fill="${c.relleno}"`;
+  const k = 26;
+  switch (tipo) {
+    case 'terminal':
+      return `<rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="${(h - 2) / 2}" ${t}/>`;
+    case 'proceso':
+      return `<rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="8" ${t}/>`;
+    case 'rombo':
+      return `<polygon points="${w / 2},2 ${w - 2},${h / 2} ${w / 2},${h - 2} 2,${h / 2}" ${t}/>`;
+    case 'datos':
+      return `<polygon points="${k},1 ${w - 1},1 ${w - k},${h - 1} 1,${h - 1}" ${t}/>`;
+    case 'preparacion':
+      return `<polygon points="${k},1 ${w - k},1 ${w - 1},${h / 2} ${w - k},${h - 1} ${k},${h - 1} 1,${h / 2}" ${t}/>`;
+    case 'predefinido':
+      return `<rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="4" ${t}/>
+        <line x1="16" y1="1" x2="16" y2="${h - 1}" stroke="${c.trazo}" stroke-width="2"/>
+        <line x1="${w - 16}" y1="1" x2="${w - 16}" y2="${h - 1}" stroke="${c.trazo}" stroke-width="2"/>`;
+    case 'manual':
+      return `<polygon points="1,1 ${w - 1},1 ${w - k},${h - 1} ${k},${h - 1}" ${t}/>`;
+    case 'display': {
+      const r = Math.min(30, w / 6);
+      return `<path d="M${k + 4},1 H${w - r} A${r} ${h / 2 - 1} 0 0 1 ${w - r},${h - 1} H${k + 4} L1,${h / 2} Z" ${t}/>`;
+    }
+    case 'retraso': {
+      const r = h / 2 - 1;
+      return `<path d="M1,1 H${w - r - 1} A${r} ${r} 0 0 1 ${w - r - 1},${h - 1} H1 Z" ${t}/>`;
+    }
+    case 'documento':
+      return `<path d="M1,1 H${w - 1} V${h - 16} C${w * 0.72},${h - 40} ${w * 0.3},${h + 8} 1,${h - 12} Z" ${t}/>`;
+    case 'multidoc': {
+      const d = (dx, dy) => `<path transform="translate(${dx},${dy})" d="M1,1 H${w - 17} V${h - 30} C${(w - 16) * 0.72},${h - 52} ${(w - 16) * 0.3},${h - 6} 1,${h - 26} Z" ${t}/>`;
+      return d(16, 1) + d(8, 8) + d(0, 15);
+    }
+    case 'bd': {
+      const ry = 14, rx = w / 2 - 1;
+      return `<path d="M1,${ry + 1} A${rx} ${ry} 0 0 1 ${w - 1},${ry + 1} V${h - ry - 1} A${rx} ${ry} 0 0 1 1,${h - ry - 1} Z" ${t}/>
+        <path d="M1,${ry + 1} A${rx} ${ry} 0 0 0 ${w - 1},${ry + 1}" fill="none" stroke="${c.trazo}" stroke-width="2"/>`;
+    }
+    case 'conector':
+      return `<polygon points="1,1 ${w - 1},1 ${w - 1},${h * 0.58} ${w / 2},${h - 1} 1,${h * 0.58}" ${t}/>`;
+    case 'union': {
+      const r = w / 2 - 1;
+      return `<circle cx="${w / 2}" cy="${h / 2}" r="${r}" ${t}/>
+        <line x1="${w / 2}" y1="1" x2="${w / 2}" y2="${h - 1}" stroke="${c.trazo}" stroke-width="2"/>
+        <line x1="1" y1="${h / 2}" x2="${w - 1}" y2="${h / 2}" stroke="${c.trazo}" stroke-width="2"/>`;
+    }
+    case 'comentario': {
+      const m = h / 2, s = `fill="none" stroke="${c.trazo}" stroke-width="1.8" stroke-linecap="round"`;
+      return `<rect x="1" y="1" width="${w - 2}" height="${h - 2}" rx="6" fill="#FFFFFF" stroke="none"/>
+        <path d="M22,1 Q12,1 12,11 V${m - 8} Q12,${m} 2,${m} Q12,${m} 12,${m + 8} V${h - 11} Q12,${h - 1} 22,${h - 1}" ${s}/>
+        <path d="M${w - 22},1 Q${w - 12},1 ${w - 12},11 V${m - 8} Q${w - 12},${m} ${w - 2},${m} Q${w - 12},${m} ${w - 12},${m + 8} V${h - 11} Q${w - 12},${h - 1} ${w - 22},${h - 1}" ${s}/>`;
+    }
+  }
+}
+
+/** Margen interior para que el texto no toque los bordes inclinados o curvos de cada símbolo. */
+const RELLENO = {
+  terminal: '0 20px', proceso: '0 18px', rombo: '0 46px', datos: '0 36px', preparacion: '0 34px',
+  predefinido: '0 26px', manual: '0 34px 6px', display: '0 38px 0 40px', retraso: '0 50px 0 16px',
+  documento: '0 16px 18px', multidoc: '14px 30px 26px 14px', bd: '22px 16px 6px', conector: '0 0 10px',
+  union: '0', comentario: '0 26px',
+};
+
 const NODOS = [
   // ==================== CARRIL 1: AUTÓNOMO ====================
-  {
-    id: 'n_inicio',
-    tipo: 'terminal',
-    x: 140, y: 220,
-    titulo: 'INICIO',
-    subtitulo: 'Recepción del comprobante'
-  },
-  {
-    id: 'n_captura',
-    tipo: 'proceso',
-    clase: 'azul',
-    x: 420, y: 206,
-    titulo: 'Captura o subida de archivo',
-    desc: 'Fotografía con cámara de smartphone o subida de factura PDF',
-    tag: 'Estado: CREADO / SUBIDO',
-    tagBg: '#EFF6FF', tagColor: '#1D4ED8'
-  },
-  {
-    id: 'n_preproc_hash',
-    tipo: 'proceso',
-    clase: 'azul',
-    x: 740, y: 206,
-    titulo: 'Preprocesado y Hash SHA-256',
-    desc: 'Compresión en cliente, cálculo de huella digital y envío seguro',
-    tag: 'Evita duplicidad física',
-    tagBg: '#F3F4F6', tagColor: '#374151'
-  },
-  {
-    id: 'n_asesor_virtual',
-    tipo: 'proceso',
-    clase: 'morado',
-    x: 1850, y: 240,
-    titulo: "Intervención Asesor Fiscal Virtual",
-    desc: 'Micro-diálogo interactivo en app solicitando justificación contextual',
-    tag: 'RF-05 / LIRPF Art. 30',
-    tagBg: '#F5F3FF', tagColor: '#6D28D9'
-  },
-  {
-    id: 'n_dec_justifica',
-    tipo: 'rombo',
-    x: 2190, y: 215,
-    titulo: '¿Autónomo justifica?',
-    sub: 'Nombre cliente / motivo'
-  },
-  {
-    id: 'n_amarillo_justificado',
-    tipo: 'proceso',
-    clase: 'verde',
-    x: 2500, y: 240,
-    titulo: 'Aporte de Justificación',
-    desc: 'Se registra nombre/NIF del tercero reunido y motivo profesional',
-    tag: 'Estado: AMARILLO_JUSTIFICADO',
-    tagBg: '#DCFCE7', tagColor: '#15803D'
-  },
-  {
-    id: 'n_bloqueado',
-    tipo: 'proceso',
-    x: 2175, y: 440,
-    titulo: 'Deducción en Suspenso',
-    desc: 'El gasto permanece bloqueado y fuera de las liquidaciones trimestrales',
-    tag: 'Estado: PENDIENTE_JUSTIF.',
-    tagBg: '#FEF3C7', tagColor: '#B45309'
-  },
+  { id: 'n_inicio', tipo: 'terminal', cx: 250, cy: 280, w: 220, h: 72,
+    titulo: 'INICIO', desc: 'Recepción del comprobante' },
+  { id: 'n_factura', tipo: 'documento', color: 'azul', cx: 560, cy: 480, w: 240, h: 104,
+    titulo: 'Factura o ticket', desc: 'Papel, PDF, PNG o JPG' },
+  { id: 'n_captura', tipo: 'datos', color: 'azul', cx: 560, cy: 280, w: 290, h: 112,
+    titulo: 'Captura o subida de archivo', desc: 'Cámara con recorte, galería o selector de documentos',
+    tag: 'Estado: CREADO / SUBIDO' },
+  { id: 'n_preproc_hash', tipo: 'preparacion', color: 'azul', cx: 900, cy: 280, w: 290, h: 112,
+    titulo: 'Preprocesado y hash SHA-256', desc: 'Compresión en el cliente y huella digital antes del envío',
+    tag: 'Evita duplicados' },
+  { id: 'n_asesor_virtual', tipo: 'display', color: 'morado', cx: 1975, cy: 280, w: 290, h: 112,
+    titulo: 'Asesor Fiscal Virtual', desc: 'Pantalla de micro-diálogo que pide la justificación',
+    tag: 'RF-06 / LIRPF art. 30' },
+  { id: 'n_dec_justifica', tipo: 'rombo', cx: 2310, cy: 280, w: 220, h: 160,
+    titulo: '¿Autónomo justifica?', desc: 'Cliente / motivo' },
+  { id: 'n_amarillo_justificado', tipo: 'manual', color: 'verde', cx: 2650, cy: 280, w: 290, h: 112,
+    titulo: 'Aporte de justificación', desc: 'El autónomo escribe el tercero reunido y el motivo profesional',
+    tag: 'Estado: AMARILLO_JUSTIFICADO' },
+  { id: 'n_bloqueado', tipo: 'retraso', color: 'sAmarillo', cx: 2310, cy: 500, w: 290, h: 112,
+    titulo: 'Deducción en suspenso', desc: 'Bloqueado y fuera de la liquidación hasta que responda',
+    tag: 'PENDIENTE_JUSTIF.' },
+  { id: 'c_a_in', tipo: 'conector', color: 'neutro', cx: 1975, cy: 525, w: 56, h: 62, titulo: 'A' },
+  { id: 'c_c_out', tipo: 'conector', color: 'neutro', cx: 2650, cy: 525, w: 56, h: 62, titulo: 'C' },
 
   // ==================== CARRIL 2: MOTOR FISCAL & BACKEND ====================
-  {
-    id: 'n_ocr',
-    tipo: 'proceso',
-    clase: 'morado',
-    x: 740, y: 730,
-    titulo: 'Extracción OCR & NER',
-    desc: 'Extracción de NIF emisor, fecha, hora, bases, cuotas de IVA y total',
-    tag: 'Estado: EN_PROCESAMIENTO_OCR',
-    tagBg: '#F3E8FF', tagColor: '#7E22CE'
-  },
-  {
-    id: 'n_dec_ocr',
-    tipo: 'rombo',
-    x: 755, y: 920,
-    titulo: '¿OCR completo y NIF válido?',
-    sub: 'Algoritmo DCF Paso 1'
-  },
-  {
-    id: 'n_error_ocr',
-    tipo: 'proceso',
-    x: 420, y: 950,
-    titulo: 'Revisión manual OCR',
-    desc: 'NIF ilegible o total nulo. Se solicita al autónomo corregir datos manuales',
-    tag: 'Semáforo: AMARILLO (Error lectura)',
-    tagBg: '#FEF3C7', tagColor: '#B45309'
-  },
-  {
-    id: 'n_dec_no_afecto',
-    tipo: 'rombo',
-    x: 1090, y: 920,
-    titulo: '¿Concepto manifiestamente no afecto?',
-    sub: 'Multas, apuestas, ocio (Art. 15 LIS)'
-  },
-  {
-    id: 'n_semaforo_rojo',
-    tipo: 'semaforo',
-    clase: 'rojo',
-    x: 1070, y: 1180,
-    titulo: 'Semáforo ROJO · No Deducible',
-    desc: 'Gasto no afecto a la actividad. Advertencia legal registrada; excluido de deducción.',
-    tag: 'Estado: ROJO_NO_DEDUCIBLE'
-  },
-  {
-    id: 'n_dec_finde',
-    tipo: 'rombo',
-    x: 1410, y: 920,
-    titulo: '¿Gasto en Sábado, Domingo o Festivo?',
-    sub: 'Calendario laboral oficial'
-  },
-  {
-    id: 'n_dec_manutencion',
-    tipo: 'rombo',
-    x: 1730, y: 920,
-    titulo: '¿Hostelería > 26,67 €/día?',
-    sub: 'Límite diario LIRPF Art. 30'
-  },
-  {
-    id: 'n_dec_ticket_400',
-    tipo: 'rombo',
-    x: 2050, y: 920,
-    titulo: '¿Ticket > 400 € sin NIF receptor?',
-    sub: 'Reglamento Facturación RD 1619/12'
-  },
-  {
-    id: 'n_alerta_amarillo',
-    tipo: 'semaforo',
-    clase: 'amarillo',
-    x: 1610, y: 680,
-    titulo: 'Semáforo AMARILLO · Riesgo Fiscal',
-    desc: 'Alerta de riesgo preventivo. Se requiere micro-justificación para blindar ante la AEAT.',
-    tag: 'Estado: AMARILLO_PENDIENTE'
-  },
-  {
-    id: 'n_semaforo_verde',
-    tipo: 'semaforo',
-    clase: 'verde',
-    x: 2370, y: 945,
-    titulo: 'Semáforo VERDE · Deducible Pleno',
-    desc: 'Cumple todos los preceptos legales de la LIRPF e IVA sin contingencias detectadas.',
-    tag: 'Estado: VERDE_DEDUCIBLE'
-  },
-  {
-    id: 'n_subcuenta_pgc',
-    tipo: 'proceso',
-    clase: 'verde',
-    x: 2700, y: 948,
-    titulo: 'Imputación de Subcuenta PGC',
-    desc: 'Asignación automática a cuentas 629 (Otros servicios), 628 (Suministros), etc.',
-    tag: 'Plan General Contable',
-    tagBg: '#F4F4F5', tagColor: '#27272A'
-  },
-  {
-    id: 'n_persistencia_bd',
-    tipo: 'proceso',
-    clase: 'morado',
-    x: 3010, y: 948,
-    titulo: 'Persistencia en PostgreSQL',
-    desc: 'Registro en base de datos multi-tenant y disponibilidad en panel de despacho',
-    tag: 'ACID / Auditoría completa',
-    tagBg: '#F3E8FF', tagColor: '#7E22CE'
-  },
+  { id: 'n_ocr', tipo: 'predefinido', color: 'morado', cx: 900, cy: 790, w: 290, h: 112,
+    titulo: 'Extracción OCR y NER', desc: 'Subproceso: NIF, fecha, hora, bases, cuotas de IVA y total',
+    tag: 'Estado: EN_PROCESAMIENTO_OCR' },
+  { id: 'n_dec_ocr', tipo: 'rombo', cx: 900, cy: 1000, w: 220, h: 160,
+    titulo: '¿OCR completo y NIF válido?', desc: 'DCF paso 1' },
+  { id: 'n_error_ocr', tipo: 'manual', color: 'sAmarillo', cx: 545, cy: 1000, w: 290, h: 112,
+    titulo: 'Revisión manual OCR', desc: 'El autónomo corrige a mano los datos ilegibles',
+    tag: 'AMARILLO (error lectura)' },
+  { id: 'n_dec_no_afecto', tipo: 'rombo', cx: 1220, cy: 1000, w: 220, h: 160,
+    titulo: '¿Concepto no afecto?', desc: 'Multas, ocio (art. 15 LIS)' },
+  { id: 'n_semaforo_rojo', tipo: 'display', color: 'sRojo', cx: 1220, cy: 1240, w: 290, h: 120,
+    titulo: 'Semáforo ROJO · No deducible', desc: 'Advertencia legal en pantalla; excluido de la deducción',
+    tag: 'ROJO_NO_DEDUCIBLE' },
+  { id: 'n_dec_finde', tipo: 'rombo', cx: 1540, cy: 1000, w: 220, h: 160,
+    titulo: '¿Sábado, domingo o festivo?', desc: 'Calendario oficial' },
+  { id: 'n_dec_manutencion', tipo: 'rombo', cx: 1860, cy: 1000, w: 220, h: 160,
+    titulo: '¿Hostelería > 26,67 €/día?', desc: 'LIRPF art. 30' },
+  { id: 'n_dec_ticket_400', tipo: 'rombo', cx: 2180, cy: 1000, w: 220, h: 160,
+    titulo: '¿Ticket > 400 € sin NIF receptor?', desc: 'RD 1619/2012' },
+  { id: 'n_union_o', tipo: 'union', color: 'sAmarillo', cx: 1860, cy: 862, w: 52, h: 52 },
+  { id: 'n_alerta_amarillo', tipo: 'display', color: 'sAmarillo', cx: 1740, cy: 740, w: 300, h: 112,
+    titulo: 'Semáforo AMARILLO · Riesgo fiscal', desc: 'Alerta en pantalla: hace falta una justificación',
+    tag: 'AMARILLO_PENDIENTE' },
+  { id: 'c_a_out', tipo: 'conector', color: 'neutro', cx: 1975, cy: 740, w: 56, h: 62, titulo: 'A' },
+  { id: 'n_semaforo_verde', tipo: 'display', color: 'sVerde', cx: 2520, cy: 1000, w: 290, h: 120,
+    titulo: 'Semáforo VERDE · Deducible', desc: 'Cumple la LIRPF y el IVA sin contingencias',
+    tag: 'VERDE_DEDUCIBLE' },
+  { id: 'n_subcuenta_pgc', tipo: 'proceso', color: 'verde', cx: 2850, cy: 1000, w: 250, h: 112,
+    titulo: 'Imputación de subcuenta PGC', desc: '629, 628, 627, 624, 623…', tag: 'Plan General Contable' },
+  { id: 'n_persistencia_bd', tipo: 'bd', color: 'morado', cx: 3160, cy: 1000, w: 220, h: 136,
+    titulo: 'PostgreSQL', desc: 'Base de datos multi-tenant', tag: 'ACID / auditoría' },
+  { id: 'c_b_out', tipo: 'conector', color: 'neutro', cx: 3160, cy: 1200, w: 56, h: 62, titulo: 'B' },
+  { id: 'n_nota_finde', tipo: 'comentario', color: 'neutro', cx: 1540, cy: 1250, w: 240, h: 90,
+    titulo: 'Nota', desc: 'Festivos nacionales con Semana Santa calculada cada año' },
+  { id: 'n_nota_manut', tipo: 'comentario', color: 'neutro', cx: 1860, cy: 1250, w: 240, h: 90,
+    titulo: 'Nota', desc: 'Dieta máxima en España sin pernocta: 26,67 € al día' },
+  { id: 'n_nota_ticket', tipo: 'comentario', color: 'neutro', cx: 2180, cy: 1250, w: 240, h: 90,
+    titulo: 'Nota', desc: 'La factura simplificada solo es válida hasta 400 €' },
 
   // ==================== CARRIL 3: ASESORÍA CONTABLE ====================
-  {
-    id: 'n_bandeja_gestor',
-    tipo: 'proceso',
-    clase: 'morado',
-    x: 2500, y: 1780,
-    titulo: 'Bandeja Semafórica Asesoría',
-    desc: 'Supervisión centralizada por autónomo: gastos Verdes, Amarillos justificados y Rojos',
-    tag: 'Panel Web Gestoría',
-    tagBg: '#F4F4F5', tagColor: '#18181B'
-  },
-  {
-    id: 'n_dec_revision_gestor',
-    tipo: 'rombo',
-    x: 2190, y: 1750,
-    titulo: '¿Gestor valida justificación?',
-    sub: 'Criterio profesional contable'
-  },
-  {
-    id: 'n_rechazo_gestor',
-    tipo: 'proceso',
-    x: 2175, y: 1980,
-    titulo: 'Ajuste / Exclusión contable',
-    desc: 'El gestor reclasifica el gasto como no deducible o solicita factura rectificativa',
-    tag: 'Decisión: RECHAZADO',
-    tagBg: '#FEE2E2', tagColor: '#DC2626'
-  },
-  {
-    id: 'n_aprobado_gestor',
-    tipo: 'proceso',
-    clase: 'verde',
-    x: 1840, y: 1775,
-    titulo: 'Aprobación y Certificación',
-    desc: 'Ratificación del gasto, IVA deducible soportado y subcuenta PGC asignada',
-    tag: 'Estado: APROBADO_GESTOR',
-    tagBg: '#DCFCE7', tagColor: '#15803D'
-  },
-  {
-    id: 'n_asiento_contable',
-    tipo: 'proceso',
-    clase: 'verde',
-    x: 1470, y: 1775,
-    titulo: 'Generación de Asiento Contable',
-    desc: 'Debe: (62x) Gasto + (472) IVA soportado | Haber: (410) Acreedores / (572) Banco',
-    tag: 'Asiento balanceado en doble partida',
-    tagBg: '#EFF6FF', tagColor: '#1D4ED8'
-  },
-  {
-    id: 'n_exportacion_erp',
-    tipo: 'proceso',
-    clase: 'verde',
-    x: 1090, y: 1775,
-    titulo: 'Cierre Trimestral & Exportación',
-    desc: 'Ficheros estructurados normalizados para ERP (A3ASESOR, Contasol, SAGE, CSV)',
-    tag: 'Estado: EXPORTADO_CONTABILIZADO',
-    tagBg: '#ECFDF5', tagColor: '#047857'
-  },
-  {
-    id: 'n_fin',
-    tipo: 'terminal',
-    x: 740, y: 1795,
-    titulo: 'FIN',
-    subtitulo: 'Liquidación Modelos 303 / 130'
-  }
+  { id: 'c_c_in', tipo: 'conector', color: 'neutro', cx: 2710, cy: 1748, w: 56, h: 62, titulo: 'C' },
+  { id: 'c_b_in', tipo: 'conector', color: 'neutro', cx: 3000, cy: 1860, w: 56, h: 62, titulo: 'B' },
+  { id: 'n_bandeja_gestor', tipo: 'display', color: 'morado', cx: 2650, cy: 1860, w: 300, h: 112,
+    titulo: 'Bandeja semafórica', desc: 'Panel del gestor: verdes, amarillos justificados y rojos',
+    tag: 'Panel web gestoría' },
+  { id: 'n_dec_revision_gestor', tipo: 'rombo', cx: 2310, cy: 1860, w: 220, h: 160,
+    titulo: '¿Gestor valida?', desc: 'Criterio profesional' },
+  { id: 'n_rechazo_gestor', tipo: 'proceso', color: 'neutro', cx: 2310, cy: 2080, w: 270, h: 112,
+    titulo: 'Ajuste / exclusión contable', desc: 'Reclasifica como no deducible o pide factura rectificativa',
+    tag: 'RECHAZADO', tagBg: '#FEE2E2', tagColor: '#DC2626' },
+  { id: 'n_aprobado_gestor', tipo: 'proceso', color: 'verde', cx: 1970, cy: 1860, w: 260, h: 112,
+    titulo: 'Aprobación y certificación', desc: 'Ratifica el gasto, el IVA soportado y la subcuenta',
+    tag: 'APROBADO_GESTOR' },
+  { id: 'n_asiento_contable', tipo: 'proceso', color: 'verde', cx: 1610, cy: 1860, w: 260, h: 112,
+    titulo: 'Asiento contable', desc: 'Debe: 62x + 472 IVA | Haber: 410 / 572',
+    tag: 'Partida doble', tagBg: '#EFF6FF', tagColor: '#1D4ED8' },
+  { id: 'n_exportacion_erp', tipo: 'datos', color: 'verde', cx: 1230, cy: 1860, w: 300, h: 112,
+    titulo: 'Cierre trimestral y exportación', desc: 'Salida normalizada para el ERP (A3, Contasol, SAGE)',
+    tag: 'EXPORTADO_CONTABILIZADO' },
+  { id: 'n_ficheros', tipo: 'multidoc', color: 'verde', cx: 1230, cy: 2080, w: 260, h: 116,
+    titulo: 'Ficheros CSV / JSON', desc: 'Un lote por trimestre' },
+  { id: 'n_fin', tipo: 'terminal', cx: 860, cy: 1860, w: 220, h: 72,
+    titulo: 'FIN', desc: 'Liquidación modelos 303 / 130' },
 ];
 
 // RENDERIZAR NODOS EN EL DOM
@@ -419,304 +335,174 @@ const cNodos = document.getElementById('nodos');
 const centros = {};
 
 NODOS.forEach((n) => {
-  let el;
-  let w = 250, h = 100;
-  
-  if (n.tipo === 'terminal') {
-    w = 220; h = 72;
-    el = document.createElement('div');
-    el.className = 'nodo terminal';
-    el.style.left = `${n.x}px`;
-    el.style.top = `${n.y}px`;
-    el.innerHTML = `<div class="t-tit">${n.titulo}</div><div class="t-sub">${n.subtitulo}</div>`;
-  } else if (n.tipo === 'rombo') {
-    w = 220; h = 160;
-    el = document.createElement('div');
-    el.className = 'rombo-wrap';
-    el.style.left = `${n.x}px`;
-    el.style.top = `${n.y}px`;
-    el.innerHTML = `
-      <svg class="rombo-svg" viewBox="0 0 220 160">
-        <polygon points="110,4 216,80 110,156 4,80" fill="#FFFFFF" stroke="#3F3F46" stroke-width="2" stroke-linejoin="round" />
-      </svg>
-      <div class="rombo-contenido">
-        ${n.titulo}
-        <div class="rombo-sub">${n.sub}</div>
-      </div>
-    `;
-  } else if (n.tipo === 'semaforo') {
-    w = 260; h = 110;
-    el = document.createElement('div');
-    el.className = `nodo semaforo ${n.clase}`;
-    el.style.left = `${n.x}px`;
-    el.style.top = `${n.y}px`;
-    el.innerHTML = `
-      <div class="s-titulo">${n.titulo}</div>
-      <div class="s-desc">${n.desc}</div>
-      <div class="n-tag" style="background:rgba(0,0,0,0.06); font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; margin-top:8px; display:inline-block; padding:2px 8px; border-radius:4px;">${n.tag}</div>
-    `;
-  } else {
-    // Proceso estándar
-    el = document.createElement('div');
-    el.className = `nodo proceso ${n.clase || ''}`;
-    el.style.left = `${n.x}px`;
-    el.style.top = `${n.y}px`;
-    el.innerHTML = `
-      <div class="n-titulo">${n.titulo}</div>
-      <div class="n-desc">${n.desc}</div>
-      ${n.tag ? `<div class="n-tag" style="background:${n.tagBg}; color:${n.tagColor};">${n.tag}</div>` : ''}
-    `;
-  }
-  
+  const { w, h } = n;
+  const c = COLORES[n.tipo === 'terminal' ? 'terminal' : n.color || 'neutro'];
+  const x = n.cx - w / 2, y = n.cy - h / 2;
+  const el = document.createElement('div');
+  el.className = `nodo ${n.tipo}`;
+  Object.assign(el.style, { left: `${x}px`, top: `${y}px`, width: `${w}px`, height: `${h}px` });
+  const tag = n.tag
+    ? `<div class="n-tag" style="background:${n.tagBg || c.tagBg}; color:${n.tagColor || c.tagColor};">${n.tag}</div>`
+    : '';
+  el.innerHTML = `
+    <svg class="forma" viewBox="0 0 ${w} ${h}">${forma(n.tipo, w, h, c)}</svg>
+    <div class="contenido" style="padding:${RELLENO[n.tipo]}">
+      ${n.titulo ? `<div class="n-titulo">${n.titulo}</div>` : ''}
+      ${n.desc ? `<div class="n-desc">${n.desc}</div>` : ''}
+      ${tag}
+    </div>`;
   cNodos.appendChild(el);
-  centros[n.id] = {
-    x: n.x + w / 2,
-    y: n.y + h / 2,
-    w, h,
-    top: n.y,
-    bottom: n.y + h,
-    left: n.x,
-    right: n.x + w
-  };
+  centros[n.id] = { x: n.cx, y: n.cy, top: y, bottom: y + h, left: x, right: x + w };
 });
+
+// SIMBOLOGÍA (muestra todos los símbolos usados)
+const SIMBOLOS = [
+  ['terminal', 'Terminal'], ['proceso', 'Proceso'], ['rombo', 'Decisión'], ['datos', 'Datos E/S'],
+  ['documento', 'Documento'], ['multidoc', 'Múltiples documentos'], ['preparacion', 'Preparación'],
+  ['predefinido', 'Proceso predefinido'], ['manual', 'Operación manual'], ['display', 'Display'],
+  ['retraso', 'Retraso'], ['bd', 'Base de datos'], ['conector', 'Conexión de páginas'],
+  ['union', 'Unión «O»'], ['comentario', 'Comentario'], ['flecha', 'Línea de flujo'],
+];
+const caja = document.createElement('div');
+caja.className = 'simbologia';
+Object.assign(caja.style, { left: '130px', top: '1400px' });
+caja.innerHTML = `<h3>Simbología del diagrama de flujo</h3><div class="rejilla">${SIMBOLOS.map(([tipo, nombre]) => {
+  const [w, h] = { rombo: [80, 52], union: [52, 52], conector: [44, 52], bd: [70, 52] }[tipo] || [96, 52];
+  const c = COLORES[tipo === 'terminal' ? 'terminal' : 'neutro'];
+  const svgInterior = tipo === 'flecha'
+    ? `<line x1="4" y1="26" x2="86" y2="26" stroke="#3F3F46" stroke-width="2" marker-end="url(#flecha)"/>`
+    : `<g transform="translate(${(96 - w) / 2},0)">${forma(tipo, w, h, c)}</g>`;
+  return `<div class="simbolo"><svg viewBox="0 0 96 52">${svgInterior}</svg>${nombre}</div>`;
+}).join('')}</div>`;
+cNodos.appendChild(caja);
 
 // DEFINICIÓN DE CONEXIONES Y FLUJOS
 const svg = document.getElementById('conexiones');
 
 function crearFlechaDef() {
   const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-  defs.innerHTML = `
-    <marker id="flecha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#3F3F46" />
-    </marker>
-    <marker id="flecha-si" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#15803D" />
-    </marker>
-    <marker id="flecha-no" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#DC2626" />
-    </marker>
-    <marker id="flecha-alerta" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 1 L 10 5 L 0 9 z" fill="#D97706" />
-    </marker>
-  `;
+  defs.innerHTML = [['flecha', '#3F3F46'], ['flecha-si', '#15803D'], ['flecha-no', '#DC2626'], ['flecha-alerta', '#D97706'], ['flecha-morado', '#7C3AED']]
+    .map(([id, color]) => `
+    <marker id="${id}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="${color}" />
+    </marker>`).join('');
   svg.appendChild(defs);
+  // La simbología usa su propio SVG, así que necesita también el marcador
+  document.querySelectorAll('.simbolo svg').forEach((s) => s.insertAdjacentHTML('afterbegin', `<defs>${defs.innerHTML}</defs>`));
 }
 crearFlechaDef();
 
 function conectar(puntos, color = '#52525B', estilo = {}) {
   const poly = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
-  const strPuntos = puntos.map(p => `${p.x},${p.y}`).join(' ');
-  poly.setAttribute('points', strPuntos);
+  poly.setAttribute('points', puntos.map((p) => `${p.x},${p.y}`).join(' '));
   poly.setAttribute('fill', 'none');
   poly.setAttribute('stroke', color);
   poly.setAttribute('stroke-width', estilo.ancho || '2');
   if (estilo.dash) poly.setAttribute('stroke-dasharray', estilo.dash);
-  poly.setAttribute('marker-end', estilo.marker ? `url(#${estilo.marker})` : 'url(#flecha)');
+  if (!estilo.sinFlecha) poly.setAttribute('marker-end', `url(#${estilo.marker || 'flecha'})`);
   svg.appendChild(poly);
 }
 
 function ponerEtiqueta(texto, x, y, tipo = 'info') {
   const div = document.createElement('div');
   div.className = `etiqueta-linea ${tipo}`;
-  div.style.left = `${x}px`;
-  div.style.top = `${y}px`;
-  div.style.transform = 'translate(-50%, -50%)';
+  Object.assign(div.style, { left: `${x}px`, top: `${y}px`, transform: 'translate(-50%, -50%)' });
   div.innerText = texto;
   cNodos.appendChild(div);
 }
 
+const C = centros;
+const SI = ['#15803D', { marker: 'flecha-si' }];
+const NO = ['#DC2626', { marker: 'flecha-no' }];
+const ALERTA = ['#D97706', { marker: 'flecha-alerta' }];
+
 // ================= LÍNEAS DEL FLUJO =================
 
-// 1. Inicio -> Captura
-conectar([
-  { x: centros['n_inicio'].right, y: centros['n_inicio'].y },
-  { x: centros['n_captura'].left, y: centros['n_captura'].y }
-]);
+// Carril 1: entrada del comprobante
+conectar([{ x: C.n_inicio.right, y: C.n_inicio.y }, { x: C.n_captura.left + 14, y: C.n_captura.y }]);
+conectar([{ x: C.n_factura.x, y: C.n_factura.top }, { x: C.n_factura.x, y: C.n_captura.bottom }]);
+ponerEtiqueta('Entrada', C.n_factura.x + 44, (C.n_factura.top + C.n_captura.bottom) / 2, 'info');
+conectar([{ x: C.n_captura.right - 14, y: C.n_captura.y }, { x: C.n_preproc_hash.left, y: C.n_preproc_hash.y }]);
 
-// 2. Captura -> Preprocesado & Hash
-conectar([
-  { x: centros['n_captura'].right, y: centros['n_captura'].y },
-  { x: centros['n_preproc_hash'].left, y: centros['n_preproc_hash'].y }
-]);
+// Baja al carril 2: subproceso OCR y primera decisión
+conectar([{ x: C.n_preproc_hash.x, y: C.n_preproc_hash.bottom }, { x: C.n_ocr.x, y: C.n_ocr.top }]);
+conectar([{ x: C.n_ocr.x, y: C.n_ocr.bottom }, { x: C.n_dec_ocr.x, y: C.n_dec_ocr.top }]);
 
-// 3. Preprocesado -> OCR (Baja a carril 2)
+conectar([{ x: C.n_dec_ocr.left, y: C.n_dec_ocr.y }, { x: C.n_error_ocr.right - 14, y: C.n_error_ocr.y }], ...NO);
+ponerEtiqueta('NO (Incompleto)', C.n_dec_ocr.left - 48, C.n_dec_ocr.y - 16, 'no');
+// Tras corregir a mano, vuelve a evaluarse
 conectar([
-  { x: centros['n_preproc_hash'].x, y: centros['n_preproc_hash'].bottom },
-  { x: centros['n_preproc_hash'].x, y: centros['n_ocr'].top }
-]);
+  { x: C.n_error_ocr.x, y: C.n_error_ocr.top },
+  { x: C.n_error_ocr.x, y: C.n_ocr.y },
+  { x: C.n_ocr.left, y: C.n_ocr.y },
+], '#52525B', { dash: '6 5' });
+ponerEtiqueta('Datos corregidos', C.n_error_ocr.x, (C.n_error_ocr.top + C.n_ocr.y) / 2, 'info');
 
-// 4. OCR -> Decisión 1 (OCR completo)
-conectar([
-  { x: centros['n_ocr'].x, y: centros['n_ocr'].bottom },
-  { x: centros['n_dec_ocr'].x, y: centros['n_dec_ocr'].top }
-]);
+conectar([{ x: C.n_dec_ocr.right, y: C.n_dec_ocr.y }, { x: C.n_dec_no_afecto.left, y: C.n_dec_no_afecto.y }], ...SI);
+ponerEtiqueta('SÍ', C.n_dec_ocr.right + 50, C.n_dec_ocr.y - 16, 'si');
 
-// 5. Decisión 1: NO -> Error de lectura
-conectar([
-  { x: centros['n_dec_ocr'].left, y: centros['n_dec_ocr'].y },
-  { x: centros['n_error_ocr'].right, y: centros['n_error_ocr'].y }
-], '#DC2626', { marker: 'flecha-no' });
-ponerEtiqueta('NO (Incompleto)', centros['n_dec_ocr'].left - 45, centros['n_dec_ocr'].y - 14, 'no');
+conectar([{ x: C.n_dec_no_afecto.x, y: C.n_dec_no_afecto.bottom }, { x: C.n_semaforo_rojo.x, y: C.n_semaforo_rojo.top }], ...NO);
+ponerEtiqueta('SÍ (Multa / ocio)', C.n_dec_no_afecto.x + 62, C.n_dec_no_afecto.bottom + 50, 'no');
 
-// 6. Decisión 1: SÍ -> Decisión 2 (No afecto)
-conectar([
-  { x: centros['n_dec_ocr'].right, y: centros['n_dec_ocr'].y },
-  { x: centros['n_dec_no_afecto'].left, y: centros['n_dec_no_afecto'].y }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('SÍ', centros['n_dec_ocr'].right + 45, centros['n_dec_ocr'].y - 14, 'si');
+conectar([{ x: C.n_dec_no_afecto.right, y: C.n_dec_no_afecto.y }, { x: C.n_dec_finde.left, y: C.n_dec_finde.y }], ...SI);
+ponerEtiqueta('NO', C.n_dec_no_afecto.right + 50, C.n_dec_no_afecto.y - 16, 'si');
+conectar([{ x: C.n_dec_finde.right, y: C.n_dec_finde.y }, { x: C.n_dec_manutencion.left, y: C.n_dec_manutencion.y }], ...SI);
+ponerEtiqueta('NO', C.n_dec_finde.right + 50, C.n_dec_finde.y - 16, 'si');
+conectar([{ x: C.n_dec_manutencion.right, y: C.n_dec_manutencion.y }, { x: C.n_dec_ticket_400.left, y: C.n_dec_ticket_400.y }], ...SI);
+ponerEtiqueta('NO', C.n_dec_manutencion.right + 50, C.n_dec_manutencion.y - 16, 'si');
+conectar([{ x: C.n_dec_ticket_400.right, y: C.n_dec_ticket_400.y }, { x: C.n_semaforo_verde.left + 6, y: C.n_semaforo_verde.y }], ...SI);
+ponerEtiqueta('NO (Sin alertas)', C.n_dec_ticket_400.right + 50, C.n_dec_ticket_400.y - 16, 'si');
 
-// 7. Decisión 2: SÍ -> Semáforo ROJO
-conectar([
-  { x: centros['n_dec_no_afecto'].x, y: centros['n_dec_no_afecto'].bottom },
-  { x: centros['n_semaforo_rojo'].x, y: centros['n_semaforo_rojo'].top }
-], '#DC2626', { marker: 'flecha-no' });
-ponerEtiqueta('SÍ (Multa/Ocio)', centros['n_dec_no_afecto'].x + 55, centros['n_dec_no_afecto'].bottom + 30, 'no');
+// Las tres alertas confluyen en la unión «O» y de ahí al semáforo amarillo
+const U = C.n_union_o;
+conectar([{ x: C.n_dec_finde.x, y: C.n_dec_finde.top }, { x: C.n_dec_finde.x, y: U.y }, { x: U.left, y: U.y }], ...ALERTA);
+ponerEtiqueta('SÍ (Sáb / Dom / Festivo)', C.n_dec_finde.x, U.y + 34, 'info');
+conectar([{ x: C.n_dec_manutencion.x, y: C.n_dec_manutencion.top }, { x: U.x, y: U.bottom }], ...ALERTA);
+ponerEtiqueta('SÍ (> 26,67 €)', U.x + 72, U.y + 34, 'info');
+conectar([{ x: C.n_dec_ticket_400.x, y: C.n_dec_ticket_400.top }, { x: C.n_dec_ticket_400.x, y: U.y }, { x: U.right, y: U.y }], ...ALERTA);
+ponerEtiqueta('SÍ (> 400 €)', C.n_dec_ticket_400.x, U.y + 34, 'info');
+conectar([{ x: U.x, y: U.top }, { x: U.x, y: C.n_alerta_amarillo.bottom }], ...ALERTA);
 
-// 8. Decisión 2: NO -> Decisión 3 (Fin de semana)
-conectar([
-  { x: centros['n_dec_no_afecto'].right, y: centros['n_dec_no_afecto'].y },
-  { x: centros['n_dec_finde'].left, y: centros['n_dec_finde'].y }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('NO', centros['n_dec_no_afecto'].right + 45, centros['n_dec_no_afecto'].y - 14, 'si');
+// Notas de normativa unidas con línea discontinua
+['n_dec_finde', 'n_dec_manutencion', 'n_dec_ticket_400'].forEach((dec, i) => {
+  const nota = ['n_nota_finde', 'n_nota_manut', 'n_nota_ticket'][i];
+  conectar([{ x: C[dec].x, y: C[dec].bottom }, { x: C[nota].x, y: C[nota].top }], '#A1A1AA', { dash: '4 4', sinFlecha: true });
+});
 
-// 9. Decisión 3: SÍ -> Sube a Alerta Amarillo
-conectar([
-  { x: centros['n_dec_finde'].x, y: centros['n_dec_finde'].top },
-  { x: centros['n_dec_finde'].x, y: 735 },
-  { x: centros['n_alerta_amarillo'].left, y: 735 }
-], '#D97706', { marker: 'flecha-alerta' });
-ponerEtiqueta('SÍ (Sáb/Dom/Festivo)', centros['n_dec_finde'].x + 80, 830, 'info');
+// Conector A: del semáforo amarillo (carril 2) al Asesor Fiscal Virtual (carril 1)
+conectar([{ x: C.n_alerta_amarillo.right, y: C.n_alerta_amarillo.y }, { x: C.c_a_out.left, y: C.c_a_out.y }], ...ALERTA);
+conectar([{ x: C.c_a_in.x, y: C.c_a_in.top }, { x: C.n_asesor_virtual.x, y: C.n_asesor_virtual.bottom }], '#7C3AED', { marker: 'flecha-morado' });
+ponerEtiqueta('Notificación push', C.c_a_in.x, (C.c_a_in.top + C.n_asesor_virtual.bottom) / 2, 'info');
 
-// 10. Decisión 3: NO -> Decisión 4 (Manutención)
-conectar([
-  { x: centros['n_dec_finde'].right, y: centros['n_dec_finde'].y },
-  { x: centros['n_dec_manutencion'].left, y: centros['n_dec_manutencion'].y }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('NO', centros['n_dec_finde'].right + 45, centros['n_dec_finde'].y - 14, 'si');
+conectar([{ x: C.n_asesor_virtual.right - 20, y: C.n_asesor_virtual.y }, { x: C.n_dec_justifica.left, y: C.n_dec_justifica.y }]);
+conectar([{ x: C.n_dec_justifica.right, y: C.n_dec_justifica.y }, { x: C.n_amarillo_justificado.left, y: C.n_amarillo_justificado.y }], ...SI);
+ponerEtiqueta('SÍ', C.n_dec_justifica.right + 40, C.n_dec_justifica.y - 16, 'si');
+conectar([{ x: C.n_dec_justifica.x, y: C.n_dec_justifica.bottom }, { x: C.n_bloqueado.x, y: C.n_bloqueado.top }], ...NO);
+ponerEtiqueta('NO / Sin respuesta', C.n_dec_justifica.x + 82, C.n_dec_justifica.bottom + 18, 'no');
 
-// 11. Decisión 4: SÍ -> Sube a Alerta Amarillo
-conectar([
-  { x: centros['n_dec_manutencion'].x, y: centros['n_dec_manutencion'].top },
-  { x: centros['n_dec_manutencion'].x, y: centros['n_alerta_amarillo'].bottom }
-], '#D97706', { marker: 'flecha-alerta' });
-ponerEtiqueta('SÍ (> 26,67 €)', centros['n_dec_manutencion'].x + 50, 830, 'info');
+// Conector C: expediente justificado hacia la bandeja de la asesoría
+conectar([{ x: C.n_amarillo_justificado.x, y: C.n_amarillo_justificado.bottom }, { x: C.c_c_out.x, y: C.c_c_out.top }], ...SI);
+ponerEtiqueta('Expediente justificado', C.c_c_out.x, (C.n_amarillo_justificado.bottom + C.c_c_out.top) / 2, 'si');
+conectar([{ x: C.c_c_in.x, y: C.c_c_in.bottom }, { x: C.c_c_in.x, y: C.n_bandeja_gestor.top }], ...SI);
 
-// 12. Decisión 4: NO -> Decisión 5 (Ticket > 400€)
-conectar([
-  { x: centros['n_dec_manutencion'].right, y: centros['n_dec_manutencion'].y },
-  { x: centros['n_dec_ticket_400'].left, y: centros['n_dec_ticket_400'].y }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('NO', centros['n_dec_manutencion'].right + 45, centros['n_dec_manutencion'].y - 14, 'si');
+// Verde -> PGC -> base de datos -> conector B
+conectar([{ x: C.n_semaforo_verde.right, y: C.n_semaforo_verde.y }, { x: C.n_subcuenta_pgc.left, y: C.n_subcuenta_pgc.y }], '#15803D', { marker: 'flecha-si' });
+conectar([{ x: C.n_subcuenta_pgc.right, y: C.n_subcuenta_pgc.y }, { x: C.n_persistencia_bd.left, y: C.n_persistencia_bd.y }]);
+conectar([{ x: C.n_persistencia_bd.x, y: C.n_persistencia_bd.bottom }, { x: C.c_b_out.x, y: C.c_b_out.top }]);
+ponerEtiqueta('Gastos verdes', C.c_b_out.x - 80, (C.n_persistencia_bd.bottom + C.c_b_out.top) / 2, 'info');
+conectar([{ x: C.c_b_in.left, y: C.c_b_in.y - 10 }, { x: C.n_bandeja_gestor.right - 10, y: C.c_b_in.y - 10 }]);
 
-// 13. Decisión 5: SÍ -> Sube a Alerta Amarillo
-conectar([
-  { x: centros['n_dec_ticket_400'].x, y: centros['n_dec_ticket_400'].top },
-  { x: centros['n_dec_ticket_400'].x, y: 735 },
-  { x: centros['n_alerta_amarillo'].right, y: 735 }
-], '#D97706', { marker: 'flecha-alerta' });
-ponerEtiqueta('SÍ (> 400 €)', centros['n_dec_ticket_400'].x + 50, 830, 'info');
-
-// 14. Decisión 5: NO -> Semáforo VERDE
-conectar([
-  { x: centros['n_dec_ticket_400'].right, y: centros['n_dec_ticket_400'].y },
-  { x: centros['n_semaforo_verde'].left, y: centros['n_semaforo_verde'].y }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('NO (Sin alertas)', centros['n_dec_ticket_400'].right + 45, centros['n_dec_ticket_400'].y - 14, 'si');
-
-// 15. Alerta Amarillo -> Sube a Asesor Virtual (Carril 1)
-conectar([
-  { x: centros['n_alerta_amarillo'].right, y: centros['n_alerta_amarillo'].top + 20 },
-  { x: 1975, y: centros['n_alerta_amarillo'].top + 20 },
-  { x: 1975, y: centros['n_asesor_virtual'].bottom }
-], '#7C3AED', { marker: 'flecha' });
-ponerEtiqueta('Notificación PWA', 1975, 480, 'info');
-
-// 16. Asesor Virtual -> Decisión de justificación (Carril 1)
-conectar([
-  { x: centros['n_asesor_virtual'].right, y: centros['n_asesor_virtual'].y },
-  { x: centros['n_dec_justifica'].left, y: centros['n_dec_justifica'].y }
-]);
-
-// 17. Decisión justificación: SÍ -> Aporte de datos
-conectar([
-  { x: centros['n_dec_justifica'].right, y: centros['n_dec_justifica'].y },
-  { x: centros['n_amarillo_justificado'].left, y: centros['n_amarillo_justificado'].y }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('SÍ', centros['n_dec_justifica'].right + 40, centros['n_dec_justifica'].y - 14, 'si');
-
-// 18. Decisión justificación: NO -> Bloqueado
-conectar([
-  { x: centros['n_dec_justifica'].x, y: centros['n_dec_justifica'].bottom },
-  { x: centros['n_bloqueado'].x, y: centros['n_bloqueado'].top }
-], '#DC2626', { marker: 'flecha-no' });
-ponerEtiqueta('NO / Sin respuesta', centros['n_dec_justifica'].x + 75, centros['n_dec_justifica'].bottom + 30, 'no');
-
-// 19. Semáforo Verde -> Subcuenta PGC
-conectar([
-  { x: centros['n_semaforo_verde'].right, y: centros['n_semaforo_verde'].y },
-  { x: centros['n_subcuenta_pgc'].left, y: centros['n_subcuenta_pgc'].y }
-], '#15803D');
-
-// 20. Subcuenta PGC -> Persistencia PostgreSQL
-conectar([
-  { x: centros['n_subcuenta_pgc'].right, y: centros['n_subcuenta_pgc'].y },
-  { x: centros['n_persistencia_bd'].left, y: centros['n_persistencia_bd'].y }
-]);
-
-// 21. Amarillo Justificado -> Baja directo a Bandeja Asesoría (Carril 3)
-conectar([
-  { x: centros['n_amarillo_justificado'].x, y: centros['n_amarillo_justificado'].bottom },
-  { x: centros['n_amarillo_justificado'].x, y: 1720 },
-  { x: centros['n_bandeja_gestor'].x + 60, y: 1720 },
-  { x: centros['n_bandeja_gestor'].x + 60, y: centros['n_bandeja_gestor'].top }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('Expediente justificado listo', centros['n_amarillo_justificado'].x + 10, 1500, 'si');
-
-// 22. Persistencia BD -> Baja a Bandeja Asesoría (Carril 3)
-conectar([
-  { x: centros['n_persistencia_bd'].x, y: centros['n_persistencia_bd'].bottom },
-  { x: centros['n_persistencia_bd'].x, y: 1830 },
-  { x: centros['n_bandeja_gestor'].right, y: 1830 }
-], '#059669', { marker: 'flecha' });
-ponerEtiqueta('Gastos Verdes aprobados', centros['n_persistencia_bd'].x - 100, 1400, 'info');
-
-// 23. Bandeja Asesoría -> Decisión Gestor
-conectar([
-  { x: centros['n_bandeja_gestor'].left, y: centros['n_bandeja_gestor'].y },
-  { x: centros['n_dec_revision_gestor'].right, y: centros['n_dec_revision_gestor'].y }
-]);
-
-// 24. Decisión Gestor: NO -> Rechazo / Exclusión
-conectar([
-  { x: centros['n_dec_revision_gestor'].x, y: centros['n_dec_revision_gestor'].bottom },
-  { x: centros['n_rechazo_gestor'].x, y: centros['n_rechazo_gestor'].top }
-], '#DC2626', { marker: 'flecha-no' });
-ponerEtiqueta('NO (Rechazado)', centros['n_dec_revision_gestor'].x + 60, centros['n_dec_revision_gestor'].bottom + 30, 'no');
-
-// 25. Decisión Gestor: SÍ -> Aprobado Gestor
-conectar([
-  { x: centros['n_dec_revision_gestor'].left, y: centros['n_dec_revision_gestor'].y },
-  { x: centros['n_aprobado_gestor'].right, y: centros['n_aprobado_gestor'].y }
-], '#15803D', { marker: 'flecha-si' });
-ponerEtiqueta('SÍ (Conforme)', centros['n_dec_revision_gestor'].left - 45, centros['n_dec_revision_gestor'].y - 14, 'si');
-
-// 26. Aprobado Gestor -> Generación Asiento Contable
-conectar([
-  { x: centros['n_aprobado_gestor'].left, y: centros['n_aprobado_gestor'].y },
-  { x: centros['n_asiento_contable'].right, y: centros['n_asiento_contable'].y }
-], '#15803D');
-
-// 27. Generación Asiento -> Exportación ERP
-conectar([
-  { x: centros['n_asiento_contable'].left, y: centros['n_asiento_contable'].y },
-  { x: centros['n_exportacion_erp'].right, y: centros['n_exportacion_erp'].y }
-], '#15803D');
-
-// 28. Exportación ERP -> FIN
-conectar([
-  { x: centros['n_exportacion_erp'].left, y: centros['n_exportacion_erp'].y },
-  { x: centros['n_fin'].right, y: centros['n_fin'].y }
-], '#18181B');
+// Carril 3: revisión del gestor y cierre
+conectar([{ x: C.n_bandeja_gestor.left + 10, y: C.n_bandeja_gestor.y }, { x: C.n_dec_revision_gestor.right, y: C.n_dec_revision_gestor.y }]);
+conectar([{ x: C.n_dec_revision_gestor.x, y: C.n_dec_revision_gestor.bottom }, { x: C.n_rechazo_gestor.x, y: C.n_rechazo_gestor.top }], ...NO);
+ponerEtiqueta('NO (Rechazado)', C.n_dec_revision_gestor.x + 66, C.n_dec_revision_gestor.bottom + 20, 'no');
+conectar([{ x: C.n_dec_revision_gestor.left, y: C.n_dec_revision_gestor.y }, { x: C.n_aprobado_gestor.right, y: C.n_aprobado_gestor.y }], ...SI);
+ponerEtiqueta('SÍ (Conforme)', C.n_dec_revision_gestor.left - 50, C.n_dec_revision_gestor.y - 16, 'si');
+conectar([{ x: C.n_aprobado_gestor.left, y: C.n_aprobado_gestor.y }, { x: C.n_asiento_contable.right, y: C.n_asiento_contable.y }], '#15803D');
+conectar([{ x: C.n_asiento_contable.left, y: C.n_asiento_contable.y }, { x: C.n_exportacion_erp.right - 14, y: C.n_exportacion_erp.y }], '#15803D');
+conectar([{ x: C.n_exportacion_erp.x, y: C.n_exportacion_erp.bottom }, { x: C.n_ficheros.x, y: C.n_ficheros.top }], '#15803D');
+ponerEtiqueta('Salida', C.n_ficheros.x + 40, (C.n_exportacion_erp.bottom + C.n_ficheros.top) / 2, 'si');
+conectar([{ x: C.n_exportacion_erp.left + 14, y: C.n_exportacion_erp.y }, { x: C.n_fin.right, y: C.n_fin.y }], '#18181B');
 
 </script>
 </body>
