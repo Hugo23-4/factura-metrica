@@ -57,16 +57,21 @@ Guía completa para la configuración del entorno de desarrollo, ejecución loca
    pip install -r requirements.txt
    ```
 
-3. Inicia el servidor de API con recarga automática:
+3. (Opcional) Inicializa los datos de prueba oficiales en la base de datos:
+   ```bash
+   python -m app.db.seed
+   ```
+
+4. Inicia el servidor de API con recarga automática:
    ```bash
    uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
    ```
 
-4. **Acceso a la documentación interactiva:**
+5. **Acceso a la documentación interactiva:**
    * Swagger UI: [http://localhost:8000/docs](http://localhost:8000/docs)
    * ReDoc: [http://localhost:8000/redoc](http://localhost:8000/redoc)
 
-5. **Ejecución de pruebas automatizadas:**
+6. **Ejecución de pruebas automatizadas:**
    ```bash
    python -m pytest
    ```
