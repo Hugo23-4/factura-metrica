@@ -35,13 +35,27 @@ class GastoCreate(BaseModel):
     nifReceptor: Optional[str] = None
     baseImponible: float
     tipoIva: int = 21
-    cuotaIva: float
-    total: float
+    cuotaIva: Optional[float] = None
+    total: Optional[float] = None
     categoria: CategoriaEnum
     cuentaPgc: str = "629"
     tipoDocumento: TipoDocumentoEnum = TipoDocumentoEnum.ticket
     hashSha256: Optional[str] = None
     urlDocumento: Optional[str] = None
+
+
+class GastoUpdate(BaseModel):
+    fechaEmision: Optional[str] = None
+    nifEmisor: Optional[str] = None
+    razonSocialEmisor: Optional[str] = None
+    nifReceptor: Optional[str] = None
+    baseImponible: Optional[float] = None
+    tipoIva: Optional[int] = None
+    cuotaIva: Optional[float] = None
+    total: Optional[float] = None
+    categoria: Optional[CategoriaEnum] = None
+    cuentaPgc: Optional[str] = None
+    tipoDocumento: Optional[TipoDocumentoEnum] = None
 
 
 class GastoResponse(BaseModel):

@@ -6,7 +6,14 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.entities import Gasto, JustificacionFiscal
 from app.schemas.comprobante import DatosExtraidosResponse, EvaluacionFiscalResponse
-from app.schemas.gasto import GastoCreate, GastoResponse, JustificacionCreate, JustificacionResponse, RevisionCreate
+from app.schemas.gasto import (
+    GastoCreate,
+    GastoResponse,
+    GastoUpdate,
+    JustificacionCreate,
+    JustificacionResponse,
+    RevisionCreate,
+)
 from app.services.fiscal import evaluar_gasto
 
 router = APIRouter()
@@ -79,6 +86,9 @@ def crear_gasto(
     db: Session = Depends(get_db),
 ):
     """Registra un nuevo comprobante evaluando automáticamente su semáforo fiscal."""
+    cuota_iva = gasto_in.cuotaIva if gasto_in.cuotaIva is not None else round((gasto_in.baseImponible * gasto_in.tipoIva) / 100.0, 2)
+    total_val = gasto_in.total if gasto_in.total is not None else round(gasto_in.baseImponible + cuota_iva, 2)
+
     # Evaluar semáforo preventivo automáticamente
     datos_eval = DatosExtraidosResponse(
         fechaEmision=gasto_in.fechaEmision,
@@ -87,8 +97,8 @@ def crear_gasto(
         nifReceptor=gasto_in.nifReceptor,
         baseImponible=gasto_in.baseImponible,
         tipoIva=gasto_in.tipoIva,
-        cuotaIva=gasto_in.cuotaIva,
-        total=gasto_in.total,
+        cuotaIva=cuota_iva,
+        total=total_val,
         categoria=gasto_in.categoria,
         tipoDocumento=gasto_in.tipoDocumento,
     )
@@ -108,8 +118,8 @@ def crear_gasto(
         nif_receptor=gasto_in.nifReceptor,
         base_imponible=gasto_in.baseImponible,
         tipo_iva=gasto_in.tipoIva,
-        cuota_iva=gasto_in.cuotaIva,
-        total=gasto_in.total,
+        cuota_iva=cuota_iva,
+        total=total_val,
         categoria=gasto_in.categoria.value,
         cuenta_pgc=resultado.cuentaPgc,
         tipo_documento=gasto_in.tipoDocumento.value,
@@ -130,6 +140,74 @@ def obtener_gasto(gasto_id: str, db: Session = Depends(get_db)):
     gasto = db.query(Gasto).filter(Gasto.id == gasto_id).first()
     if not gasto:
         raise HTTPException(status_code=404, detail="Gasto no encontrado")
+    return mapear_gasto_a_response(gasto)
+
+
+@router.put("/gastos/{gasto_id}", response_model=GastoResponse)
+def actualizar_gasto(
+    gasto_id: str,
+    gasto_in: GastoUpdate,
+    db: Session = Depends(get_db),
+):
+    """Permite al autónomo editar los datos de un gasto y reevalúa el semáforo fiscal."""
+    gasto = db.query(Gasto).filter(Gasto.id == gasto_id).first()
+    if not gasto:
+        raise HTTPException(status_code=404, detail="Gasto no encontrado")
+
+    if gasto_in.razonSocialEmisor is not None:
+        gasto.razon_social_emisor = gasto_in.razonSocialEmisor
+    if gasto_in.nifEmisor is not None:
+        gasto.nif_emisor = gasto_in.nifEmisor
+    if gasto_in.nifReceptor is not None:
+        gasto.nif_receptor = gasto_in.nifReceptor
+    if gasto_in.baseImponible is not None:
+        gasto.base_imponible = gasto_in.baseImponible
+    if gasto_in.tipoIva is not None:
+        gasto.tipo_iva = gasto_in.tipoIva
+    if gasto_in.cuotaIva is not None:
+        gasto.cuota_iva = gasto_in.cuotaIva
+    elif gasto_in.baseImponible is not None or gasto_in.tipoIva is not None:
+        gasto.cuota_iva = round((gasto.base_imponible * gasto.tipo_iva) / 100.0, 2)
+
+    if gasto_in.total is not None:
+        gasto.total = gasto_in.total
+    elif gasto_in.baseImponible is not None or gasto_in.tipoIva is not None:
+        gasto.total = round(gasto.base_imponible + gasto.cuota_iva, 2)
+
+    if gasto_in.categoria is not None:
+        gasto.categoria = gasto_in.categoria.value
+    if gasto_in.cuentaPgc is not None:
+        gasto.cuenta_pgc = gasto_in.cuentaPgc
+    if gasto_in.tipoDocumento is not None:
+        gasto.tipo_documento = gasto_in.tipoDocumento.value
+
+    if gasto_in.fechaEmision is not None:
+        try:
+            gasto.fecha_emision = datetime.fromisoformat(gasto_in.fechaEmision.replace("Z", "+00:00"))
+        except Exception:
+            pass
+
+    # Reevaluar semáforo fiscal con los datos modificados
+    datos_eval = DatosExtraidosResponse(
+        fechaEmision=gasto.fecha_emision.isoformat() if gasto.fecha_emision else "",
+        nifEmisor=gasto.nif_emisor,
+        razonSocialEmisor=gasto.razon_social_emisor,
+        nifReceptor=gasto.nif_receptor,
+        baseImponible=gasto.base_imponible,
+        tipoIva=gasto.tipo_iva,
+        cuotaIva=gasto.cuota_iva,
+        total=gasto.total,
+        categoria=gasto.categoria,
+        tipoDocumento=gasto.tipo_documento,
+    )
+    resultado = evaluar_gasto(datos_eval)
+    gasto.estado_semaforo = resultado.semaforo
+    gasto.motivo_riesgo = resultado.motivoRiesgo
+    if not gasto_in.cuentaPgc:
+        gasto.cuenta_pgc = resultado.cuentaPgc
+
+    db.commit()
+    db.refresh(gasto)
     return mapear_gasto_a_response(gasto)
 
 

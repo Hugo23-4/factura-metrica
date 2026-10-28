@@ -12,6 +12,14 @@ class ClienteCreate(BaseModel):
     domicilioFiscal: Optional[str] = None
 
 
+class ClienteUpdate(BaseModel):
+    nombreFiscal: Optional[str] = None
+    actividadIae: Optional[str] = None
+    telefono: Optional[str] = None
+    domicilioFiscal: Optional[str] = None
+    activo: Optional[bool] = Field(None, description="Permite pausar o reactivar el acceso del autónomo")
+
+
 class ClienteResponse(BaseModel):
     id: str
     usuarioId: str
@@ -21,6 +29,7 @@ class ClienteResponse(BaseModel):
     actividadIae: Optional[str] = None
     telefono: Optional[str] = None
     domicilioFiscal: Optional[str] = None
+    activo: bool = True
     fechaAlta: str
 
     model_config = ConfigDict(from_attributes=True)
