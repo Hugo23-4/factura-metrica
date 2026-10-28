@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.api.v1.endpoints import asesorias, auth, clientes, exportaciones, gastos, ocr
 from app.db.base import Base
-from app.db.session import engine
+from app.db.session import engine, SessionLocal
 import app.models  # noqa: F401
 
 # Inicializar tablas de la base de datos
@@ -42,3 +42,12 @@ def health_check():
         "service": settings.PROJECT_NAME,
         "version": settings.VERSION,
     }
+
+
+@app.post(f"{settings.API_V1_STR}/demo/poblar", tags=["Demostración"])
+def poblar_datos_demo():
+    """Puebla o restablece los datos oficiales de prueba en la base de datos para el tribunal."""
+    from app.db.seed import poblar_datos_prueba
+    with SessionLocal() as session:
+        poblar_datos_prueba(session)
+    return {"status": "ok", "message": "Datos de prueba inicializados correctamente"}

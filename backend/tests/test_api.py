@@ -59,3 +59,9 @@ def test_evaluar_gasto_multa():
     response = client.post("/api/v1/gastos/evaluar", json=payload)
     assert response.status_code == 200
     assert response.json()["semaforo"] == "rojo"
+
+
+def test_poblar_datos_demo_endpoint():
+    response = client.post("/api/v1/demo/poblar")
+    assert response.status_code == 200
+    assert response.json()["status"] == "ok"
